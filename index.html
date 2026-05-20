@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#0a0e17">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Freya's Stock</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  html { font-size:15px; }
+  body {
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:#0a0e17; color:#f0f2f8;
+    padding-bottom:calc(64px + env(safe-area-inset-bottom,0px) + 12px);
+    min-height:100dvh; overflow-x:hidden;
+  }
+  ::-webkit-scrollbar { width:3px; }
+  ::-webkit-scrollbar-track { background:#0a0e17; }
+  ::-webkit-scrollbar-thumb { background:#262d3d; border-radius:2px; }
+  .header {
+    background:#111827; border-bottom:1px solid #262d3d;
+    padding:12px 16px 10px; position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  }
+  .header-top { display:flex; align-items:center; justify-content:space-between; }
+  .logo { display:flex; align-items:center; gap:10px; }
+  .logo-icon {
+    width:34px; height:34px;
+    background:linear-gradient(135deg,#f472b6,#a78bfa);
+    border-radius:8px; display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:800; color:#fff;
+  }
+  .logo-text { font-size:1.15rem; font-weight:700; letter-spacing:-0.3px; }
+  .logo-text span { background:linear-gradient(135deg,#f472b6,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .logo-sub { font-size:0.6rem; color:#5a6070; letter-spacing:1.5px; text-transform:uppercase; }
+  .header-date { font-size:0.7rem; color:#5a6070; text-align:right; }
+  .header-date strong { color:#9298a8; font-weight:500; }
+  .disc {
+    margin:12px 16px 0; padding:10px 14px;
+    background:rgba(248,113,113,0.06); border:1px solid rgba(248,113,113,0.15);
+    border-radius:8px; font-size:0.7rem; color:#5a6070; line-height:1.5;
+  }
+  .disc strong { color:#f87171; font-weight:600; }
+  .ticker-wrap {
+    margin:0 16px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory; display:flex; gap:10px;
+    padding:14px 0 10px; scrollbar-width:none;
+  }
+  .ticker-wrap::-webkit-scrollbar { display:none; }
+  .ticker-card {
+    flex:0 0 calc(50% - 5px); scroll-snap-align:start;
+    background:#1a1f2e; border:1px solid #262d3d;
+    border-radius:10px; padding:14px 16px; position:relative; overflow:hidden; min-width:0;
+  }
+  .ticker-card::before { content:''; position:absolute; top:0; left:0; width:100%; height:2.5px; }
+  .tc:nth-child(1)::before { background:linear-gradient(90deg,#4f8cff,#22d3ee); }
+  .tc:nth-child(2)::before { background:linear-gradient(90deg,#34d399,#22d3ee); }
+  .tc:nth-child(3)::before { background:linear-gradient(90deg,#fbbf24,#fb923c); }
+  .tc:nth-child(4)::before { background:linear-gradient(90deg,#f472b6,#a78bfa); }
+  .tc:nth-child(5)::before { background:linear-gradient(90deg,#fb923c,#f87171); }
+  .tc:nth-child(6)::before { background:linear-gradient(90deg,#a78bfa,#f472b6); }
+  .tc:nth-child(7)::before { background:linear-gradient(90deg,#22d3ee,#34d399); }
+  .tc:nth-child(8)::before { background:linear-gradient(90deg,#a3e635,#fbbf24); }
+  .tc:nth-child(9)::before { background:linear-gradient(90deg,#f87171,#fb923c); }
+  .tc-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .tc-symbol { font-size:1rem; font-weight:700; letter-spacing:-0.3px; }
+  .tc-name { font-size:0.6rem; color:#5a6070; }
+  .tc-price { font-size:1.35rem; font-weight:700; font-family:'JetBrains Mono',monospace; letter-spacing:-0.5px; }
+  .tc-chg { display:inline-flex; align-items:center; gap:3px; font-size:0.72rem; font-weight:600; font-family:'JetBrains Mono',monospace; padding:2px 8px; border-radius:5px; margin-top:4px; }
+  .tc-chg.up { color:#34d399; background:rgba(52,211,153,0.1); }
+  .tc-chg.down { color:#f87171; background:rgba(248,113,113,0.1); }
+  .section { margin:0 16px 18px; }
+  .sec-title { display:flex; align-items:center; gap:8px; font-size:0.95rem; font-weight:600; margin-bottom:12px; padding-top:6px; }
+  .sec-title .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .sec-title .dot.n { background:#4f8cff; }
+  .sec-title .dot.a { background:#34d399; }
+  .sec-title .dot.p { background:#fbbf24; }
+  .stock-tabs {
+    display:flex; gap:3px; background:#111827; border-radius:8px;
+    padding:3px; margin-bottom:12px; overflow-x:auto;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .stock-tabs::-webkit-scrollbar { display:none; }
+  .stock-tab {
+    flex-shrink:0; padding:7px 12px; border-radius:6px;
+    font-size:0.72rem; font-weight:600; color:#5a6070;
+    cursor:pointer; transition:all 0.2s;
+    border:none; background:none; font-family:inherit; white-space:nowrap;
+  }
+  .stock-tab:active { transform:scale(0.96); }
+  .stock-tab.active { color:#fff; }
+  .news-box { display:none; }
+  .news-box.active { display:block; }
+  .news-item {
+    background:#1a1f2e; border:1px solid #262d3d;
+    border-radius:10px; padding:14px 16px; margin-bottom:10px;
+  }
+  .news-item:active { background:#1e2538; }
+  .ni-tag { display:inline-block; font-size:0.6rem; font-weight:600; letter-spacing:0.3px; text-transform:uppercase; padding:2px 7px; border-radius:4px; margin-bottom:6px; }
+  .ni-tag.hot { background:rgba(251,191,36,0.15); color:#fbbf24; }
+  .ni-tag.er { background:rgba(79,140,255,0.15); color:#4f8cff; }
+  .ni-tag.pr { background:rgba(52,211,153,0.15); color:#34d399; }
+  .ni-tag.rk { background:rgba(248,113,113,0.15); color:#f87171; }
+  .ni-tag.an { background:rgba(167,139,250,0.15); color:#a78bfa; }
+  .ni-tag.ai { background:rgba(34,211,238,0.15); color:#22d3ee; }
+  .ni-tag.bb { background:rgba(251,146,60,0.15); color:#fb923c; }
+  .news-item h4 { font-size:0.88rem; font-weight:600; line-height:1.4; margin-bottom:5px; }
+  .news-item p { font-size:0.75rem; color:#9298a8; line-height:1.6; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .ni-src { margin-top:8px; font-size:0.65rem; color:#5a6070; }
+  .advice-item {
+    background:#1a1f2e; border:1px solid #262d3d;
+    border-radius:10px; padding:16px; margin-bottom:10px;
+    position:relative; overflow:hidden;
+  }
+  .advice-item::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; }
+  .ai-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .ai-header h3 { font-size:0.95rem; font-weight:700; }
+  .ai-rate { font-size:0.65rem; font-weight:600; padding:3px 10px; border-radius:12px; flex-shrink:0; }
+  .ai-rate.bull { background:rgba(52,211,153,0.12); color:#34d399; }
+  .ai-rate.caut { background:rgba(248,113,113,0.12); color:#f87171; }
+  .ai-rate.mix { background:rgba(167,139,250,0.12); color:#a78bfa; }
+  .ai-rate.wait { background:rgba(251,191,36,0.12); color:#fbbf24; }
+  .ai-body { font-size:0.78rem; color:#9298a8; line-height:1.65; }
+  .ai-body strong { color:#f0f2f8; }
+  .ai-body ul { list-style:none; padding:0; margin-top:6px; }
+  .ai-body ul li { padding:3px 0 3px 16px; position:relative; font-size:0.75rem; }
+  .ai-body ul li::before { content:''; position:absolute; left:0; top:9px; width:5px; height:5px; border-radius:50%; }
+  .ai-body ul li.g::before { background:#34d399; }
+  .ai-body ul li.r::before { background:#f87171; }
+  .ai-body ul li.y::before { background:#fbbf24; }
+  .ai-body ul li.b::before { background:#4f8cff; }
+  .ai-target { margin-top:10px; padding-top:10px; border-top:1px solid #262d3d; font-size:0.7rem; color:#5a6070; }
+  .ai-target strong { color:#9298a8; }
+  .pf-card { background:#1a1f2e; border:1px solid #262d3d; border-radius:10px; padding:16px; margin-bottom:10px; }
+  .pf-card h3 { font-size:0.9rem; font-weight:600; margin-bottom:10px; }
+  .pf-table { width:100%; border-collapse:collapse; }
+  .pf-table th,.pf-table td { padding:6px 5px; text-align:left; font-size:0.68rem; border-bottom:1px solid #262d3d; }
+  .pf-table th { color:#5a6070; font-weight:500; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.3px; }
+  .pf-table td { color:#9298a8; font-family:'JetBrains Mono',monospace; font-size:0.68rem; }
+  .pf-table td:first-child { font-family:'Inter',sans-serif; font-weight:600; color:#f0f2f8; }
+  .pf-table .vg { color:#34d399; } .pf-table .vr { color:#f87171; }
+  .pf-table tr:last-child td { border-bottom:none; }
+  .pf-score { text-align:center; padding:20px 16px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .pf-num { font-size:2.2rem; font-weight:800; font-family:'JetBrains Mono',monospace; letter-spacing:-1px; background:linear-gradient(135deg,#f472b6,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .pf-label { font-size:0.75rem; color:#9298a8; }
+  .pf-desc { font-size:0.7rem; color:#5a6070; line-height:1.6; max-width:320px; }
+  .pf-desc strong { color:#9298a8; }
+  .cat-badge { display:inline-block; font-size:0.55rem; font-weight:600; padding:2px 7px; border-radius:4px; margin-left:6px; }
+  .cat-badge.tech { background:rgba(79,140,255,0.15); color:#4f8cff; }
+  .cat-badge.resource { background:rgba(251,191,36,0.15); color:#fbbf24; }
+  .cat-badge.energy { background:rgba(251,146,60,0.15); color:#fb923c; }
+  .cat-badge.chem { background:rgba(167,139,250,0.15); color:#a78bfa; }
+  .bottom-nav {
+    position:fixed; bottom:0; left:0; right:0;
+    height:calc(64px + env(safe-area-inset-bottom,0px));
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    background:rgba(17,24,39,0.92); backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px); border-top:1px solid #262d3d;
+    display:flex; align-items:center; z-index:100;
+  }
+  .bn-item {
+    flex:1; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:2px; height:100%; border:none; background:none;
+    font-family:inherit; cursor:pointer; color:#5a6070; padding:0 4px;
+  }
+  .bn-item:active { transform:scale(0.95); }
+  .bn-item.active { color:#a78bfa; }
+  .bn-item .bn-icon { font-size:1.2rem; line-height:1; }
+  .bn-item .bn-label { font-size:0.6rem; font-weight:500; letter-spacing:0.2px; }
+  .page { display:none; } .page.active { display:block; }
+  .scroll-hint { text-align:center; font-size:0.6rem; color:#5a6070; padding:2px 0 6px; letter-spacing:1px; }
+  .page-foot { text-align:center; padding:20px 16px 12px; font-size:0.65rem; color:#5a6070; line-height:1.7; }
+  .page-foot a { color:#a78bfa; text-decoration:none; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  .ticker-card,.news-item,.advice-item,.pf-card { animation:fadeUp 0.4s ease forwards; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-icon">F</div>
+      <div>
+        <div class="logo-text"><span>Freya's</span> Stock</div>
+        <div class="logo-sub">A股投资跟踪 · 每日自动更新</div>
+      </div>
+    </div>
+    <div class="header-date" id="headerDate">加载中...</div>
+  </div>
+</header>
+
+<div class="disc"><strong>⚠ 声明：</strong>仅供参考，不构成投资建议。数据源于公开资讯，可能存在延迟。自动更新于 2026年05月20日</div>
+
+<div class="page active" id="page-prices">
+  <div class="ticker-wrap" id="tickerWrap">
+    
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:#4f8cff">亨通光电</span>
+        <span class="tc-name">600487</span>
+      </div>
+      <div class="tc-price">75.78</div>
+      <div class="tc-chg up">▲ +0.41%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:#34d399">沪电股份</span>
+        <span class="tc-name">002463</span>
+      </div>
+      <div class="tc-price">103.58</div>
+      <div class="tc-chg up">▲ +0.96%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:#fbbf24">生益科技</span>
+        <span class="tc-name">600183</span>
+      </div>
+      <div class="tc-price">100.56</div>
+      <div class="tc-chg down">▼ -0.22%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:#f472b6">亨通股份</span>
+        <span class="tc-name">600226</span>
+      </div>
+      <div class="tc-price">6.03</div>
+      <div class="tc-chg up">▲ +3.79%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:#fb923c">紫金矿业</span>
+        <span class="tc-name">601899</span>
+      </div>
+      <div class="tc-price">30.39</div>
+      <div class="tc-chg down">▼ -2.47%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:#a78bfa">景旺电子</span>
+        <span class="tc-name">603228</span>
+      </div>
+      <div class="tc-price">76.26</div>
+      <div class="tc-chg up">▲ +6.99%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:#22d3ee">洛阳钼业</span>
+        <span class="tc-name">603993</span>
+      </div>
+      <div class="tc-price">17.96</div>
+      <div class="tc-chg down">▼ -1.21%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:#a3e635">中国神华</span>
+        <span class="tc-name">601088</span>
+      </div>
+      <div class="tc-price">46.0</div>
+      <div class="tc-chg down">▼ -0.15%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:#f87171">华光环能</span>
+        <span class="tc-name">600475</span>
+      </div>
+      <div class="tc-price">19.18</div>
+      <div class="tc-chg down">▼ -3.81%</div>
+    </div>
+  </div>
+  <div class="scroll-hint">← 左右滑动查看全部 9 只 →</div>
+
+  <div class="section">
+    <div class="sec-title"><span class="dot n"></span>个股最新资讯</div>
+    <div class="stock-tabs" id="stockTabs">
+      
+      <button class="stock-tab active" data-s="600487" style="border-bottom:2px solid #4f8cff">亨通光电</button>
+      <button class="stock-tab" data-s="002463" style="border-bottom:2px solid #34d399">沪电股份</button>
+      <button class="stock-tab" data-s="600183" style="border-bottom:2px solid #fbbf24">生益科技</button>
+      <button class="stock-tab" data-s="600226" style="border-bottom:2px solid #f472b6">亨通股份</button>
+      <button class="stock-tab" data-s="601899" style="border-bottom:2px solid #fb923c">紫金矿业</button>
+      <button class="stock-tab" data-s="603228" style="border-bottom:2px solid #a78bfa">景旺电子</button>
+      <button class="stock-tab" data-s="603993" style="border-bottom:2px solid #22d3ee">洛阳钼业</button>
+      <button class="stock-tab" data-s="601088" style="border-bottom:2px solid #a3e635">中国神华</button>
+      <button class="stock-tab" data-s="600475" style="border-bottom:2px solid #f87171">华光环能</button>
+    </div>
+    
+    <div class="news-box active" id="n-600487">
+      
+      <div class="news-item">
+        <span class="ni-tag ai">🤖 AI</span>
+        <h4>亨通光电光通信需求持续增长</h4>
+        <p>AI数据中心驱动光纤需求，公司产能扩张计划推进中</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+      <div class="news-item">
+        <span class="ni-tag an">📈 机构</span>
+        <h4>机构密集关注亨通光电</h4>
+        <p>多家机构对公司空芯光纤等前沿技术给予高度评价</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+    </div>
+    <div class="news-box" id="n-002463">
+      
+      <div class="news-item">
+        <span class="ni-tag ai">🤖 AI</span>
+        <h4>沪电股份AI服务器PCB需求旺盛</h4>
+        <p>高速运算服务器、AI等新兴场景对PCB结构性需求持续</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+      <div class="news-item">
+        <span class="ni-tag pr">🏭 进展</span>
+        <h4>泰国工厂进入规模化运营</h4>
+        <p>泰国基地营收超2025全年，产能利用率90%以上</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+    </div>
+    <div class="news-box" id="n-600183">
+      
+      <div class="news-item">
+        <span class="ni-tag pr">🏭 进展</span>
+        <h4>生益科技覆铜板双轮驱动</h4>
+        <p>覆铜板+PCB高端化趋势明确，AI材料批量供货</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+      <div class="news-item">
+        <span class="ni-tag hot">🔥 热点</span>
+        <h4>松山湖项目推进中</h4>
+        <p>52亿元高性能覆铜板项目计划2026年下半年启动</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+    </div>
+    <div class="news-box" id="n-600226">
+      
+      <div class="news-item">
+        <span class="ni-tag er">📊 财报</span>
+        <h4>亨通股份氨基酸项目投产</h4>
+        <p>Q1营收同比增超8成，铜箔业务国产替代空间大</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+      <div class="news-item">
+        <span class="ni-tag hot">🔥 热点</span>
+        <h4>融资余额大幅增长</h4>
+        <p>杠杆资金加速流入，关注度显著提升</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+    </div>
+    <div class="news-box" id="n-601899">
+      
+      <div class="news-item">
+        <span class="ni-tag er">📊 财报</span>
+        <h4>紫金矿业Q1净利翻倍</h4>
+        <p>铜金价格高位运行，归母净利润接近翻倍增长</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+      <div class="news-item">
+        <span class="ni-tag an">📈 机构</span>
+        <h4>多家机构看好后市</h4>
+        <p>20家机构覆盖，目标均价44.95元，上涨空间可观</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+    </div>
+    <div class="news-box" id="n-603228">
+      
+      <div class="news-item">
+        <span class="ni-tag ai">🤖 AI</span>
+        <h4>景旺电子AI业务持续突破</h4>
+        <p>AI服务器PCB量产，800G光模块批量供货</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+      <div class="news-item">
+        <span class="ni-tag pr">🏭 进展</span>
+        <h4>珠海泰国双基地推进</h4>
+        <p>产能扩张有序进行，为中长期增长提供支撑</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+    </div>
+    <div class="news-box" id="n-603993">
+      
+      <div class="news-item">
+        <span class="ni-tag er">📊 财报</span>
+        <h4>洛阳钼业铜金双极战略</h4>
+        <p>Q1净利润同比+96.66%，铜金钨全面开花</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+      <div class="news-item">
+        <span class="ni-tag hot">🔥 热点</span>
+        <h4>分红方案已公布</h4>
+        <p>每股派0.286元，合计派发约61亿元</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+    </div>
+    <div class="news-box" id="n-601088">
+      
+      <div class="news-item">
+        <span class="ni-tag pr">🏭 进展</span>
+        <h4>神华发电量同比增14.8%</h4>
+        <p>4月运营数据公布，电力业务快速增长</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+      <div class="news-item">
+        <span class="ni-tag an">📈 机构</span>
+        <h4>高股息防御配置首选</h4>
+        <p>20家机构买入评级，负债率仅29%财务稳健</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+    </div>
+    <div class="news-box" id="n-600475">
+      
+      <div class="news-item">
+        <span class="ni-tag ai">🤖 AI</span>
+        <h4>华光环能氢能业务突破</h4>
+        <p>1500Nm³/h电解槽达行业最高压力水平</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+      <div class="news-item">
+        <span class="ni-tag pr">🏭 进展</span>
+        <h4>海外市场持续拓展</h4>
+        <p>签约印尼伊拉克等多国项目，海外收入目标提升40%</p>
+        <div class="ni-src">自动更新</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-advice">
+  <div class="section" style="margin-top:14px;">
+    <div class="sec-title"><span class="dot a"></span>操作建议</div>
+    
+    <div class="advice-item" style="border-left-color:#4f8cff">
+      <div class="ai-header">
+        <h3 style="color:#4f8cff">亨通光电 600487 <span class="cat-badge tech">科技制造</span></h3>
+        <span class="ai-rate bull">积极看多</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>AI数据中心驱动光纤需求爆发，空芯光纤全球领先
+        <ul><li class="g">Q1净利+98%，AI长协订单充足</li><li class="g">空芯光纤商用持续落地</li><li class="g">机构密集调研，280+家关注</li><li class="r">年内涨幅已大，有回调风险</li><li class="y">建议：强势标的可持有，注意高位波动</li></ul>
+      </div>
+      <div class="ai-target">机构关注度极高 · 当前 75.78</div>
+    </div>
+    <div class="advice-item" style="border-left-color:#34d399">
+      <div class="ai-header">
+        <h3 style="color:#34d399">沪电股份 002463 <span class="cat-badge tech">科技制造</span></h3>
+        <span class="ai-rate bull">积极看多</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>AI服务器PCB核心供应商，泰国工厂超预期放量
+        <ul><li class="g">Q1净利+62.9%，连续多季创新高</li><li class="g">泰国工厂营收超2025全年</li><li class="g">布局CoWoP/mSAP前沿技术</li><li class="r">短期主力资金有流出迹象</li><li class="y">建议：AI PCB龙头，可中长期持有</li></ul>
+      </div>
+      <div class="ai-target">机构目标价 114.5 · 当前 103.58</div>
+    </div>
+    <div class="advice-item" style="border-left-color:#fbbf24">
+      <div class="ai-header">
+        <h3 style="color:#fbbf24">生益科技 600183 <span class="cat-badge tech">科技制造</span></h3>
+        <span class="ai-rate bull">谨慎看多</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>覆铜板+PCB双轮驱动，AI服务器+商业航天双概念加持
+        <ul><li class="g">Q1净利+44%，产品结构优化</li><li class="g">AI低损耗材料批量供货</li><li class="g">松山湖52亿项目推进中</li><li class="r">高管拟减持，短期涨幅大</li><li class="y">建议：中期看好，注意回调风险</li></ul>
+      </div>
+      <div class="ai-target">多家机构买入评级 · 当前 100.56</div>
+    </div>
+    <div class="advice-item" style="border-left-color:#f472b6">
+      <div class="ai-header">
+        <h3 style="color:#f472b6">亨通股份 600226 <span class="cat-badge chem">多元</span></h3>
+        <span class="ai-rate wait">谨慎观望</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>营收大增但估值高位，铜箔业务有看点
+        <ul><li class="g">Q1营收+82%，氨基酸项目投产</li><li class="g">铜箔国产替代有空间</li><li class="r">PE处于历史96%分位</li><li class="r">股权质押触发风险评级</li><li class="y">建议：小仓位或观望，注意高估值风险</li></ul>
+      </div>
+      <div class="ai-target">动态PE较高 · 当前 6.03</div>
+    </div>
+    <div class="advice-item" style="border-left-color:#fb923c">
+      <div class="ai-header">
+        <h3 style="color:#fb923c">紫金矿业 601899 <span class="cat-badge resource">资源</span></h3>
+        <span class="ai-rate mix">逢低关注</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>Q1净利翻倍，铜金高位运行，近期回调后吸引力增强
+        <ul><li class="g">Q1净利+97.5%，业绩爆发</li><li class="g">机构目标价44.95，空间48%</li><li class="r">近期主力资金持续流出</li><li class="y">建议：逢回调分批低吸，长线持有</li></ul>
+      </div>
+      <div class="ai-target">机构目标价 44.95 · 当前 30.39</div>
+    </div>
+    <div class="advice-item" style="border-left-color:#a78bfa">
+      <div class="ai-header">
+        <h3 style="color:#a78bfa">景旺电子 603228 <span class="cat-badge tech">科技制造</span></h3>
+        <span class="ai-rate mix">中期看好</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>AI高端PCB+光模块核心标的，新产能即将释放
+        <ul><li class="g">AI服务器PCB量产</li><li class="g">800G光模块批量供货</li><li class="g">珠海/泰国基地支撑中长期</li><li class="r">Q1利润降28%，短期有压力</li><li class="y">建议：关注产能释放，中期布局</li></ul>
+      </div>
+      <div class="ai-target">机构目标价 75.43 · 当前 76.26</div>
+    </div>
+    <div class="advice-item" style="border-left-color:#22d3ee">
+      <div class="ai-header">
+        <h3 style="color:#22d3ee">洛阳钼业 603993 <span class="cat-badge resource">资源</span></h3>
+        <span class="ai-rate mix">逢低关注</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>铜金钨全面开花，Q1净利+97%，分红在即
+        <ul><li class="g">Q1净利+96.7%</li><li class="g">5月27日分红除权</li><li class="g">22家机构买入评级</li><li class="r">近4日跌13%，主力流出</li><li class="y">建议：分红前可关注，中长期持有</li></ul>
+      </div>
+      <div class="ai-target">机构目标价 25.66 · 当前 17.96</div>
+    </div>
+    <div class="advice-item" style="border-left-color:#a3e635">
+      <div class="ai-header">
+        <h3 style="color:#a3e635">中国神华 601088 <span class="cat-badge energy">能源</span></h3>
+        <span class="ai-rate bull">稳健配置</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>煤炭+电力一体化龙头，防守属性强
+        <ul><li class="g">负债率仅29%，财务稳健</li><li class="g">发电量+14.8%</li><li class="g">20家机构买入，目标价53.81</li><li class="r">Q1净利-10.7%</li><li class="r">煤价偏弱</li><li class="y">建议：组合防御配置，可长期持有</li></ul>
+      </div>
+      <div class="ai-target">机构目标价 53.81 · 当前 46.0</div>
+    </div>
+    <div class="advice-item" style="border-left-color:#f87171">
+      <div class="ai-header">
+        <h3 style="color:#f87171">华光环能 600475 <span class="cat-badge energy">能源</span></h3>
+        <span class="ai-rate wait">关注转型</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>氢能+火改+海外三线并进，转型预期强
+        <ul><li class="g">氢能电解槽技术领先</li><li class="g">火电改造NOx降40%+</li><li class="g">海外多国签约</li><li class="r">Q1营收-6.4%，净利-10%</li><li class="y">建议：关注氢能+火改订单落地</li></ul>
+      </div>
+      <div class="ai-target">华安证券增持评级 · 当前 19.18</div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-portfolio">
+  <div class="section" style="margin-top:14px;">
+    <div class="sec-title"><span class="dot p"></span>组合总览</div>
+    <div class="pf-card">
+      <h3>📊 持仓速览</h3>
+      <div style="overflow-x:auto">
+      <table class="pf-table">
+        <thead><tr><th>股票</th><th>代码</th><th>价格</th><th>涨跌</th><th>分类</th></tr></thead>
+        <tbody>
+          <tr><td>亨通光电</td><td>600487</td><td>75.78</td><td class="vg">+0.41%</td><td style="font-size:0.6rem;color:#4f8cff">通信</td></tr>
+          <tr><td>沪电股份</td><td>002463</td><td>103.58</td><td class="vg">+0.96%</td><td style="font-size:0.6rem;color:#34d399">PCB</td></tr>
+          <tr><td>生益科技</td><td>600183</td><td>100.56</td><td class="vr">-0.22%</td><td style="font-size:0.6rem;color:#fbbf24">覆铜板</td></tr>
+          <tr><td>亨通股份</td><td>600226</td><td>6.03</td><td class="vg">+3.79%</td><td style="font-size:0.6rem;color:#f472b6">多元</td></tr>
+          <tr><td>紫金矿业</td><td>601899</td><td>30.39</td><td class="vr">-2.47%</td><td style="font-size:0.6rem;color:#fb923c">矿业</td></tr>
+          <tr><td>景旺电子</td><td>603228</td><td>76.26</td><td class="vg">+6.99%</td><td style="font-size:0.6rem;color:#a78bfa">PCB</td></tr>
+          <tr><td>洛阳钼业</td><td>603993</td><td>17.96</td><td class="vr">-1.21%</td><td style="font-size:0.6rem;color:#22d3ee">矿业</td></tr>
+          <tr><td>中国神华</td><td>601088</td><td>46.0</td><td class="vr">-0.15%</td><td style="font-size:0.6rem;color:#a3e635">煤炭</td></tr>
+          <tr><td>华光环能</td><td>600475</td><td>19.18</td><td class="vr">-3.81%</td><td style="font-size:0.6rem;color:#f87171">环保</td></tr></tbody>
+      </table>
+      </div>
+    </div>
+    <div class="pf-card pf-score">
+      <div class="pf-num">7.5 / 10</div>
+      <div class="pf-label">组合健康评分</div>
+      <div class="pf-desc">
+        <strong>配置结构：</strong>科技制造4只 | 资源矿业2只 | 能源2只 | 多元1只<br>
+        <strong>今日表现：</strong>4涨 5跌<br>
+        <strong>策略：</strong>核心仓位聚焦科技制造，资源类逢回调布局，神华作防御底仓
+      </div>
+    </div>
+    <div class="pf-card">
+      <h3>📌 2026年05月20日 小结</h3>
+      <div class="ai-body" style="font-size:0.78rem;color:#9298a8;line-height:1.7;">
+        <p>今日 4 涨 5 跌。数据来源：Yahoo Finance，仅供参考。</p>
+        <p style="margin-top:8px;">建议继续保持核心仓位，资源类标的可趁回调逐步布局。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="bn-item active" data-page="prices"><span class="bn-icon">📊</span><span class="bn-label">行情</span></button>
+  <button class="bn-item" data-page="advice"><span class="bn-icon">💡</span><span class="bn-label">建议</span></button>
+  <button class="bn-item" data-page="portfolio"><span class="bn-icon">📋</span><span class="bn-label">组合</span></button>
+</nav>
+
+<div class="page-foot">Freya's Stock · 数据来源公开资讯 · 自动更新于 2026年05月20日</div>
+
+<script>
+  document.getElementById('headerDate').innerHTML = '<strong>' + new Date().toLocaleDateString('zh-CN',{month:'long',day:'numeric'}) + '</strong> · ' + new Date().toLocaleDateString('zh-CN',{weekday:'short'});
+  const sTabs = document.querySelectorAll('.stock-tab');
+  const sBoxes = document.querySelectorAll('.news-box');
+  sTabs.forEach(t => t.addEventListener('click', () => {
+    sTabs.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    sBoxes.forEach(b => b.classList.remove('active'));
+    document.getElementById('n-' + t.dataset.s).classList.add('active');
+  }));
+  const navItems = document.querySelectorAll('.bn-item');
+  const pages = document.querySelectorAll('.page');
+  navItems.forEach(item => item.addEventListener('click', () => {
+    navItems.forEach(x => x.classList.remove('active'));
+    item.classList.add('active');
+    pages.forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + item.dataset.page).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }));
+  document.getElementById('tickerWrap')?.addEventListener('scroll', () => {
+    document.querySelector('.scroll-hint').style.opacity = '0';
+  });
+</script>
+</body>
+</html>
