@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#0a0e17">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Freya's Stock</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --bg2: #111827;
+    --card: #1a1f2e;
+    --card2: #1e2538;
+    --border: #262d3d;
+    --text: #f0f2f8;
+    --text2: #9298a8;
+    --text3: #5a6070;
+    --blue: #4f8cff;
+    --green: #34d399;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --cyan: #22d3ee;
+    --pink: #f472b6;
+    --lime: #a3e635;
+    --safe-bottom: env(safe-area-inset-bottom,0px);
+    --tab-h: 64px;
+  }
+
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  html { font-size:15px; }
+  body {
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding-bottom:calc(var(--tab-h) + var(--safe-bottom) + 12px);
+    min-height:100dvh;
+    overflow-x:hidden;
+  }
+  ::-webkit-scrollbar { width:3px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+  /* ========== HEADER ========== */
+  .header {
+    background:var(--bg2);
+    border-bottom:1px solid var(--border);
+    padding:12px 16px 10px;
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+  }
+  .header-top {
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .logo { display:flex; align-items:center; gap:10px; }
+  .logo-icon {
+    width:34px;height:34px;
+    background:linear-gradient(135deg,#f472b6,#a78bfa);
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:800;color:#fff;
+  }
+  .logo-text { font-size:1.15rem;font-weight:700;letter-spacing:-0.3px; }
+  .logo-text span { background:linear-gradient(135deg,#f472b6,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .logo-sub { font-size:0.6rem;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase; }
+  .header-date { font-size:0.7rem;color:var(--text3);text-align:right; }
+  .header-date strong { color:var(--text2);font-weight:500; }
+
+  .disc {
+    margin:12px 16px 0;
+    padding:10px 14px;
+    background:rgba(248,113,113,0.06);
+    border:1px solid rgba(248,113,113,0.15);
+    border-radius:8px;
+    font-size:0.7rem;
+    color:var(--text3);
+    line-height:1.5;
+  }
+  .disc strong { color:var(--red);font-weight:600; }
+
+  /* ========== PRICE TICKER ========== */
+  .ticker-wrap {
+    margin:0 16px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;
+    display:flex;
+    gap:10px;
+    padding:14px 0 10px;
+    scrollbar-width:none;
+  }
+  .ticker-wrap::-webkit-scrollbar { display:none; }
+  .ticker-card {
+    flex:0 0 calc(50% - 5px);
+    scroll-snap-align:start;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+    position:relative;
+    overflow:hidden;
+    min-width:0;
+  }
+  .ticker-card::before {
+    content:'';position:absolute;top:0;left:0;width:100%;height:2.5px;
+  }
+  .tc:nth-child(1)::before { background:linear-gradient(90deg,var(--blue),var(--cyan)); }
+  .tc:nth-child(2)::before { background:linear-gradient(90deg,var(--green),var(--cyan)); }
+  .tc:nth-child(3)::before { background:linear-gradient(90deg,var(--yellow),var(--orange)); }
+  .tc:nth-child(4)::before { background:linear-gradient(90deg,var(--pink),var(--purple)); }
+  .tc:nth-child(5)::before { background:linear-gradient(90deg,var(--orange),var(--red)); }
+  .tc:nth-child(6)::before { background:linear-gradient(90deg,var(--purple),var(--pink)); }
+  .tc:nth-child(7)::before { background:linear-gradient(90deg,var(--cyan),var(--green)); }
+  .tc:nth-child(8)::before { background:linear-gradient(90deg,var(--lime),var(--yellow)); }
+  .tc:nth-child(9)::before { background:linear-gradient(90deg,var(--red),var(--orange)); }
+
+  .tc-top { display:flex;align-items:center;justify-content:space-between;margin-bottom:6px; }
+  .tc-symbol { font-size:1rem;font-weight:700;letter-spacing:-0.3px; }
+  .tc-name { font-size:0.6rem;color:var(--text3); }
+  .tc-price { font-size:1.35rem;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:-0.5px; }
+  .tc-chg {
+    display:inline-flex;align-items:center;gap:3px;
+    font-size:0.72rem;font-weight:600;font-family:'JetBrains Mono',monospace;
+    padding:2px 8px;border-radius:5px;margin-top:4px;
+  }
+  .tc-chg.up { color:var(--green);background:rgba(52,211,153,0.1); }
+  .tc-chg.down { color:var(--red);background:rgba(248,113,113,0.1); }
+
+  /* ========== SECTION ========== */
+  .section { margin:0 16px 18px; }
+  .sec-title {
+    display:flex;align-items:center;gap:8px;
+    font-size:0.95rem;font-weight:600;
+    margin-bottom:12px;padding-top:6px;
+  }
+  .sec-title .dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
+  .sec-title .dot.n { background:var(--blue); }
+  .sec-title .dot.a { background:var(--green); }
+  .sec-title .dot.p { background:var(--yellow); }
+
+  /* ========== STOCK TABS ========== */
+  .stock-tabs {
+    display:flex;gap:3px;
+    background:var(--bg2);
+    border-radius:8px;
+    padding:3px;
+    margin-bottom:12px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .stock-tabs::-webkit-scrollbar { display:none; }
+  .stock-tab {
+    flex-shrink:0;
+    padding:7px 12px;
+    border-radius:6px;
+    font-size:0.72rem;font-weight:600;
+    color:var(--text3);
+    cursor:pointer;
+    transition:all 0.2s;
+    border:none;background:none;
+    font-family:inherit;
+    white-space:nowrap;
+    text-align:center;
+  }
+  .stock-tab:active { transform:scale(0.96); }
+  .stock-tab.active { color:#fff; }
+
+  .news-box { display:none; }
+  .news-box.active { display:block; }
+  .news-item {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:10px;
+    transition:all 0.2s;
+  }
+  .news-item:active { background:var(--card2); }
+  .ni-tag {
+    display:inline-block;
+    font-size:0.6rem;font-weight:600;
+    letter-spacing:0.3px;text-transform:uppercase;
+    padding:2px 7px;border-radius:4px;
+    margin-bottom:6px;
+  }
+  .ni-tag.hot { background:rgba(251,191,36,0.15);color:var(--yellow); }
+  .ni-tag.er { background:rgba(79,140,255,0.15);color:var(--blue); }
+  .ni-tag.pr { background:rgba(52,211,153,0.15);color:var(--green); }
+  .ni-tag.rk { background:rgba(248,113,113,0.15);color:var(--red); }
+  .ni-tag.an { background:rgba(167,139,250,0.15);color:var(--purple); }
+  .ni-tag.ai { background:rgba(34,211,238,0.15);color:var(--cyan); }
+  .ni-tag.bb { background:rgba(251,146,60,0.15);color:var(--orange); }
+  .news-item h4 {
+    font-size:0.88rem;font-weight:600;
+    line-height:1.4;margin-bottom:5px;
+  }
+  .news-item p {
+    font-size:0.75rem;color:var(--text2);
+    line-height:1.6;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .ni-src { margin-top:8px;font-size:0.65rem;color:var(--text3); }
+
+  /* ========== ADVICE ========== */
+  .advice-item {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:16px;
+    margin-bottom:10px;
+    position:relative;
+    overflow:hidden;
+  }
+  .advice-item::before {
+    content:'';position:absolute;top:0;left:0;width:4px;height:100%;
+  }
+  .ai-header {
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:8px;
+  }
+  .ai-header h3 { font-size:0.95rem;font-weight:700; }
+  .ai-rate {
+    font-size:0.65rem;font-weight:600;
+    padding:3px 10px;border-radius:12px;flex-shrink:0;
+  }
+  .ai-rate.bull { background:rgba(52,211,153,0.12);color:var(--green); }
+  .ai-rate.caut { background:rgba(248,113,113,0.12);color:var(--red); }
+  .ai-rate.mix { background:rgba(167,139,250,0.12);color:var(--purple); }
+  .ai-rate.wait { background:rgba(251,191,36,0.12);color:var(--yellow); }
+  .ai-body {
+    font-size:0.78rem;color:var(--text2);line-height:1.65;
+  }
+  .ai-body strong { color:var(--text); }
+  .ai-body ul { list-style:none;padding:0;margin-top:6px; }
+  .ai-body ul li {
+    padding:3px 0 3px 16px;
+    position:relative;
+    font-size:0.75rem;
+  }
+  .ai-body ul li::before {
+    content:'';position:absolute;left:0;top:9px;
+    width:5px;height:5px;border-radius:50%;
+  }
+  .ai-body ul li.g::before { background:var(--green); }
+  .ai-body ul li.r::before { background:var(--red); }
+  .ai-body ul li.y::before { background:var(--yellow); }
+  .ai-target {
+    margin-top:10px;padding-top:10px;
+    border-top:1px solid var(--border);
+    font-size:0.7rem;color:var(--text3);
+  }
+  .ai-target strong { color:var(--text2); }
+
+  /* ========== PORTFOLIO ========== */
+  .pf-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:16px;
+    margin-bottom:10px;
+  }
+  .pf-card h3 { font-size:0.9rem;font-weight:600;margin-bottom:10px; }
+  .pf-table { width:100%;border-collapse:collapse; }
+  .pf-table th,.pf-table td {
+    padding:6px 5px;text-align:left;
+    font-size:0.68rem;border-bottom:1px solid var(--border);
+  }
+  .pf-table th {
+    color:var(--text3);font-weight:500;
+    font-size:0.6rem;text-transform:uppercase;letter-spacing:0.3px;
+  }
+  .pf-table td { color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:0.68rem; }
+  .pf-table td:first-child { font-family:'Inter',sans-serif;font-weight:600;color:var(--text); }
+  .pf-table .vg { color:var(--green); }
+  .pf-table .vr { color:var(--red); }
+  .pf-table tr:last-child td { border-bottom:none; }
+
+  .pf-score {
+    text-align:center;
+    padding:20px 16px;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+  }
+  .pf-num {
+    font-size:2.2rem;font-weight:800;
+    font-family:'JetBrains Mono',monospace;letter-spacing:-1px;
+    background:linear-gradient(135deg,#f472b6,#a78bfa);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .pf-label { font-size:0.75rem;color:var(--text2); }
+  .pf-desc { font-size:0.7rem;color:var(--text3);line-height:1.6;max-width:320px; }
+  .pf-desc strong { color:var(--text2); }
+
+  /* ========== CATEGORY BADGE ========== */
+  .cat-badge {
+    display:inline-block;
+    font-size:0.55rem;font-weight:600;letter-spacing:0.3px;
+    padding:2px 7px;border-radius:4px;
+    margin-left:6px;
+  }
+  .cat-badge.tech { background:rgba(79,140,255,0.15);color:var(--blue); }
+  .cat-badge.resource { background:rgba(251,191,36,0.15);color:var(--yellow); }
+  .cat-badge.energy { background:rgba(251,146,60,0.15);color:var(--orange); }
+  .cat-badge.chem { background:rgba(167,139,250,0.15);color:var(--purple); }
+
+  /* ========== BOTTOM NAV ========== */
+  .bottom-nav {
+    position:fixed;bottom:0;left:0;right:0;
+    height:calc(var(--tab-h) + var(--safe-bottom));
+    padding-bottom:var(--safe-bottom);
+    background:rgba(17,24,39,0.92);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-top:1px solid var(--border);
+    display:flex;align-items:center;
+    z-index:100;
+  }
+  .bn-item {
+    flex:1;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:2px;height:100%;
+    border:none;background:none;
+    font-family:inherit;
+    cursor:pointer;
+    color:var(--text3);
+    transition:color 0.2s;
+    padding:0 4px;
+  }
+  .bn-item:active { transform:scale(0.95); }
+  .bn-item.active { color:var(--purple); }
+  .bn-item .bn-icon { font-size:1.2rem;line-height:1; }
+  .bn-item .bn-label { font-size:0.6rem;font-weight:500;letter-spacing:0.2px; }
+
+  .page { display:none; }
+  .page.active { display:block; }
+
+  .scroll-hint {
+    text-align:center;font-size:0.6rem;color:var(--text3);
+    padding:2px 0 6px;
+    letter-spacing:1px;
+  }
+
+  .page-foot {
+    text-align:center;
+    padding:20px 16px 12px;
+    font-size:0.65rem;
+    color:var(--text3);
+    line-height:1.7;
+  }
+  .page-foot a { color:var(--purple);text-decoration:none; }
+
+  @keyframes fadeUp {
+    from { opacity:0;transform:translateY(10px); }
+    to { opacity:1;transform:translateY(0); }
+  }
+  .ticker-card,.news-item,.advice-item,.pf-card {
+    animation:fadeUp 0.4s ease forwards;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-icon">F</div>
+      <div>
+        <div class="logo-text"><span>Freya's</span> Stock</div>
+        <div class="logo-sub">A股投资跟踪</div>
+      </div>
+    </div>
+    <div class="header-date" id="headerDate">加载中...</div>
+  </div>
+</header>
+
+<div class="disc">
+  <strong>⚠ 声明：</strong>仅供参考，不构成投资建议。数据源于公开资讯，可能存在延迟。
+</div>
+
+<!-- ===== PAGE: PRICES ===== -->
+<div class="page active" id="page-prices">
+  <div class="ticker-wrap" id="tickerWrap">
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:var(--blue)">亨通光电</span>
+        <span class="tc-name">600487</span>
+      </div>
+      <div class="tc-price">75.78</div>
+      <div class="tc-chg up">▲ 0.41%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:var(--green)">沪电股份</span>
+        <span class="tc-name">002463</span>
+      </div>
+      <div class="tc-price">103.58</div>
+      <div class="tc-chg up">▲ 0.96%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:var(--yellow)">生益科技</span>
+        <span class="tc-name">600183</span>
+      </div>
+      <div class="tc-price">94.18</div>
+      <div class="tc-chg up">▲ 10.01%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:var(--pink)">亨通股份</span>
+        <span class="tc-name">600226</span>
+      </div>
+      <div class="tc-price">6.03</div>
+      <div class="tc-chg up">▲ 3.79%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:var(--orange)">紫金矿业</span>
+        <span class="tc-name">601899</span>
+      </div>
+      <div class="tc-price">30.39</div>
+      <div class="tc-chg down">▼ 2.47%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:var(--purple)">景旺电子</span>
+        <span class="tc-name">603228</span>
+      </div>
+      <div class="tc-price">76.26</div>
+      <div class="tc-chg up">▲ 6.99%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:var(--cyan)">洛阳钼业</span>
+        <span class="tc-name">603993</span>
+      </div>
+      <div class="tc-price">17.96</div>
+      <div class="tc-chg down">▼ 1.21%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:var(--lime)">中国神华</span>
+        <span class="tc-name">601088</span>
+      </div>
+      <div class="tc-price">46.00</div>
+      <div class="tc-chg down">▼ 0.15%</div>
+    </div>
+    <div class="ticker-card tc">
+      <div class="tc-top">
+        <span class="tc-symbol" style="color:var(--red)">华光环能</span>
+        <span class="tc-name">600475</span>
+      </div>
+      <div class="tc-price">19.18</div>
+      <div class="tc-chg down">▼ 3.81%</div>
+    </div>
+  </div>
+  <div class="scroll-hint">← 左右滑动查看全部 9 只 →</div>
+
+  <!-- News Section -->
+  <div class="section">
+    <div class="sec-title"><span class="dot n"></span>个股最新资讯</div>
+    <div class="stock-tabs" id="stockTabs">
+      <button class="stock-tab active" data-s="htgd" style="border-bottom:2px solid var(--blue)">亨通光电</button>
+      <button class="stock-tab" data-s="hdgf" style="border-bottom:2px solid var(--green)">沪电股份</button>
+      <button class="stock-tab" data-s="sykj" style="border-bottom:2px solid var(--yellow)">生益科技</button>
+      <button class="stock-tab" data-s="htgf" style="border-bottom:2px solid var(--pink)">亨通股份</button>
+      <button class="stock-tab" data-s="zjky" style="border-bottom:2px solid var(--orange)">紫金矿业</button>
+      <button class="stock-tab" data-s="jwdz" style="border-bottom:2px solid var(--purple)">景旺电子</button>
+      <button class="stock-tab" data-s="lymy" style="border-bottom:2px solid var(--cyan)">洛阳钼业</button>
+      <button class="stock-tab" data-s="zgsh" style="border-bottom:2px solid var(--lime)">中国神华</button>
+      <button class="stock-tab" data-s="hghn" style="border-bottom:2px solid var(--red)">华光环能</button>
+    </div>
+
+    <!-- 亨通光电 -->
+    <div class="news-box active" id="n-htgd">
+      <div class="news-item"><span class="ni-tag er">📊 一季报</span><h4>Q1净利润11.05亿，同比+98.53%</h4><p>营收177.91亿（+34.09%），扣非净利润11.33亿（+107.68%）。光通信需求增长、价格上涨驱动。</p><div class="ni-src">东方财富 · 4月</div></div>
+      <div class="news-item"><span class="ni-tag ai">🤖 AI数据中心</span><h4>光棒产能提升1.5倍，AI长协订单驱动</h4><p>与多家头部AI数据中心客户签署长协订单，内蒙古基地光棒产能提升1.5倍。高密度MPO光缆已批量用于大型数据中心。</p><div class="ni-src">同花顺 · 5月19日</div></div>
+      <div class="news-item"><span class="ni-tag hot">🔥 前沿技术</span><h4>中标中国电信空芯光缆项目</h4><p>继中国移动空芯光缆项目后，再中标中国电信西部信息中心枢纽互联工程空芯混合光缆项目。全球首条三波段超低损多芯光纤已落地。</p><div class="ni-src">e公司 · 5月</div></div>
+      <div class="news-item"><span class="ni-tag an">📈 机构调研</span><h4>280余家机构密集调研，目标价80.82</h4><p>5月18日接待约1000人次调研，近90天10家机构评级：买入9家增持1家。今年以来涨幅已超200%。</p><div class="ni-src">同花顺 · 5月18日</div></div>
+    </div>
+
+    <!-- 沪电股份 -->
+    <div class="news-box" id="n-hdgf">
+      <div class="news-item"><span class="ni-tag er">📊 Q1业绩</span><h4>营收62.14亿（+53.9%），净利12.42亿（+62.9%）</h4><p>高速运算服务器、AI等新兴场景对PCB的结构性需求驱动，营收净利连续多季度创新高。</p><div class="ni-src">公司公告 · 4月</div></div>
+      <div class="news-item"><span class="ni-tag pr">🏭 泰国工厂</span><h4>泰国Q1营收已超2025全年，产能利用率90%+</h4><p>海外客户认证超70%完成，汽车事业部2026年进入量产阶段。Q2产能将进一步释放。</p><div class="ni-src">东方财富 · 5月19日</div></div>
+      <div class="news-item"><span class="ni-tag ai">🤖 前沿布局</span><h4>布局CoWoP、mSAP等下一代技术</h4><p>在常州金坛设立子公司，布局CoWoP、mSAP及光铜融合技术。AI从预训练进入推理应用阶段，全球CSP资本支出大幅增加。</p><div class="ni-src">搜狐 · 5月19日</div></div>
+      <div class="news-item"><span class="ni-tag an">📈 机构评级</span><h4>19家机构覆盖：买入15家增持4家</h4><p>目标均价114.5元。5月20日收盘103.58元，三井住友、BNP等外资机构参与调研。</p><div class="ni-src">证券之星 · 5月20日</div></div>
+    </div>
+
+    <!-- 生益科技 -->
+    <div class="news-box" id="n-sykj">
+      <div class="news-item"><span class="ni-tag er">📊 一季报超预期</span><h4>Q1净利5.64亿（+43.76%），毛利率提升</h4><p>营收56.11亿（+26.86%），扣非5.6亿（+44.97%），毛利率24.6%（+3.33pct）。产品结构优化推动利润释放。</p><div class="ni-src">新浪财经 · 4月</div></div>
+      <div class="news-item"><span class="ni-tag hot">🔥 涨停驱动</span><h4>订单饱满 + AI服务器 + 商业航天</h4><p>AI/服务器极低损耗产品已批量供应GPU及AI服务器客户，与银河航天签署商业航天战略合作。松山湖项目（总投资52亿）计划下半年启动。</p><div class="ni-src">老虎证券 · 5月</div></div>
+      <div class="news-item"><span class="ni-tag rk">⚠ 高管减持</span><h4>3位高管拟减持不超149.07万股</h4><p>曾红慧、唐芙云、曾耀德因自身资金需求拟减持。短期涨幅较大，注意回调风险。</p><div class="ni-src">Investing.com · 5月</div></div>
+      <div class="news-item"><span class="ni-tag an">📈 机构观点</span><h4>中泰/西南证券买入评级</h4><p>预测2025-2027年归母净利润27/34.5/41.2亿。覆铜板+PCB双轮驱动，铜价上行龙头议价能力强。</p><div class="ni-src">中泰证券 · 5月</div></div>
+    </div>
+
+    <!-- 亨通股份 -->
+    <div class="news-box" id="n-htgf">
+      <div class="news-item"><span class="ni-tag er">📊 一季报</span><h4>Q1营收6.97亿（+82.21%），净利7181万</h4><p>氨基酸项目即将投产驱动营收大增。扣非净利润4417万，同比下降12.36%。负债率34.31%。</p><div class="ni-src">东方财富 · 4月</div></div>
+      <div class="news-item"><span class="ni-tag hot">🔥 杠杆资金追捧</span><h4>融资余额增幅超100%，被列为疯抢标的</h4><p>5月6日至18日融资余额增幅超100%，超过历史90%分位水平。5月19日融资余额2.72亿元。</p><div class="ni-src">同花顺 · 5月19日</div></div>
+      <div class="news-item"><span class="ni-tag pr">🏭 铜箔业务</span><h4>铜箔业务有望打开成长空间</h4><p>"供需共振+国产替代"双轮驱动，电解铜箔业务有望成为新增长点。主业涵盖电解铜箔、生物兽药、饲料添加剂、热电联供。</p><div class="ni-src">经济观察网 · 5月</div></div>
+      <div class="news-item"><span class="ni-tag rk">⚠ 估值风险</span><h4>估值处历史高位，股权质押需关注</h4><p>市盈TTM 84.55倍，处于历史96.27%分位。股权质押触发鹰眼"风险"评级。</p><div class="ni-src">经济观察网 · 5月</div></div>
+    </div>
+
+    <!-- 紫金矿业 -->
+    <div class="news-box" id="n-zjky">
+      <div class="news-item"><span class="ni-tag er">📊 Q1业绩爆炸</span><h4>归母净利润200.79亿（+97.5%）</h4><p>营收984.98亿（+24.79%），归母净利润接近翻倍。铜金价格高位运行驱动业绩爆发。</p><div class="ni-src">公司公告 · 4月</div></div>
+      <div class="news-item"><span class="ni-tag hot">📅 股东会</span><h4>6月5日召开年度股东会</h4><p>审议利润分配、员工持股计划等14项议案。未来三年分红规划已发布，市值管理制度落地。</p><div class="ni-src">证券之星 · 5月</div></div>
+      <div class="news-item"><span class="ni-tag an">📈 机构目标价44.95</span><h4>20家机构覆盖，距现价有48%空间</h4><p>买入15家增持5家，目标均价44.95元。当前30.39元，近期回调后吸引力增强。</p><div class="ni-src">证券之星 · 5月20日</div></div>
+      <div class="news-item"><span class="ni-tag rk">⚠ 资金流出</span><h4>主力资金持续净流出，5日流出约30亿</h4><p>5月20日主力净流出11.6亿，5月15日单日净流出19.72亿（跌5.01%）。短期回调压力明显。</p><div class="ni-src">证券之星 · 5月20日</div></div>
+    </div>
+
+    <!-- 景旺电子 -->
+    <div class="news-box" id="n-jwdz">
+      <div class="news-item"><span class="ni-tag er">📊 Q1业绩</span><h4>营收38.92亿（+16.41%），净利降28%</h4><p>上游原材料高位、战略投入、新厂爬坡等因素影响利润。扣非净利润1.89亿（-18.29%）。</p><div class="ni-src">公司公告 · 4月23日</div></div>
+      <div class="news-item"><span class="ni-tag hot">🔥 AI业务</span><h4>AI服务器PCB量产，800G光模块稳定供货</h4><p>已量产40层以上HLC、6阶22层HDI等高端产品。800G光模块批量供货，1.6T光模块积极推进。珠海基地预计2026年中试产。</p><div class="ni-src">国投证券 · 5月7日</div></div>
+      <div class="news-item"><span class="ni-tag an">📈 机构评级</span><h4>国投证券买入-A，目标75.43</h4><p>预计2026年归母净利润19.88亿。6家买入1家增持。5月20日涨6.99%至76.26元，主力净买入2.94亿。</p><div class="ni-src">证券之星 · 5月20日</div></div>
+      <div class="news-item"><span class="ni-tag pr">🏭 产能扩张</span><h4>珠海基地+泰国基地双线推进</h4><p>珠海金湾基地投资50亿扩产，泰国生产基地预计2026年内投产。产能释放将为未来增长提供支撑。</p><div class="ni-src">新浪财经 · 5月</div></div>
+    </div>
+
+    <!-- 洛阳钼业 -->
+    <div class="news-box" id="n-lymy">
+      <div class="news-item"><span class="ni-tag er">📊 Q1净利润77.6亿（+96.66%）</span><h4>营收664亿（+44.34%），铜金双极驱动</h4><p>矿产铜产量18.8万吨（+10.1%），毛利率63.7%。黄金新并表，Q1收入12亿，毛利率45.6%。</p><div class="ni-src">太平洋证券 · 5月14日</div></div>
+      <div class="news-item"><span class="ni-tag hot">💰 分红方案</span><h4>每股派0.286元，合计派发约61亿</h4><p>股权登记日5月26日，除权除息日5月27日。以总股本213.94亿股为基数。</p><div class="ni-src">公司公告 · 5月</div></div>
+      <div class="news-item"><span class="ni-tag rk">⚠ 连跌4日</span><h4>近4日累计跌13.39%，主力持续流出</h4><p>5月20日跌1.21%至17.96元，近5日主力合计净流出约30亿。但22家机构买入评级，目标均价25.66元。</p><div class="ni-src">证券之星 · 5月20日</div></div>
+      <div class="news-item"><span class="ni-tag an">📈 机构展望</span><h4>预计2026年归母净利311.6亿</h4><p>钴金属毛利率86.3%，钨收入+292.9%。黄金2029年有望达20吨年产能。铜金双极战略初现峥嵘。</p><div class="ni-src">太平洋证券 · 5月</div></div>
+    </div>
+
+    <!-- 中国神华 -->
+    <div class="news-box" id="n-zgsh">
+      <div class="news-item"><span class="ni-tag er">📊 一季报</span><h4>Q1营收703.97亿，净利106.67亿（-10.73%）</h4><p>煤炭价格下行拖累盈利，但负债率仅29.03%，财务稳健。毛利率32.89%。</p><div class="ni-src">公司公告 · 4月</div></div>
+      <div class="news-item"><span class="ni-tag pr">⚡ 4月运营数据</span><h4>发电量同比+14.8%，收购资产已完成并表</h4><p>4月商品煤产量4060万吨（-2.9%），销售量5110万吨（+0.2%）。发电量222.2亿千瓦时（+14.8%），新机组投运贡献增量。</p><div class="ni-src">e公司 · 5月19日</div></div>
+      <div class="news-item"><span class="ni-tag an">📈 机构评级</span><h4>20家机构买入17家增持3家</h4><p>目标均价53.81元，距当前46元有17%上行空间。煤炭+电力一体化优势明显。</p><div class="ni-src">证券之星 · 5月</div></div>
+      <div class="news-item"><span class="ni-tag rk">⚠ 煤价风险</span><h4>煤产量同比略降，行业需求偏弱</h4><p>商品煤产量同比降2.9%，煤炭行业整体处于周期底部区域。电力业务增长部分对冲煤价下行影响。</p><div class="ni-src">东方财富 · 5月19日</div></div>
+    </div>
+
+    <!-- 华光环能 -->
+    <div class="news-box" id="n-hghn">
+      <div class="news-item"><span class="ni-tag er">📊 2025年报</span><h4>全年营收91.39亿，净利3.88亿（-44.98%）</h4><p>利润下滑主因去年同期存在大额资产处置收益。Q1营收18.39亿（-6.39%），净利1.16亿（-9.98%）。</p><div class="ni-src">公司公告 · 4月</div></div>
+      <div class="news-item"><span class="ni-tag hot">🔥 氢能业务</span><h4>1500Nm³/h电解槽达行业最高压力</h4><p>已完成中能建松原项目大标方电解槽交付，500MW制氢设备基地已建成。跟踪新疆哈密、东北松原二期等大型绿氢项目。</p><div class="ni-src">业绩说明会 · 5月15日</div></div>
+      <div class="news-item"><span class="ni-tag pr">🌍 海外市场</span><h4>签约印尼/伊拉克/哈萨克等多国项目</h4><p>海外收入占比力争提升40%以上。炉型覆盖燃机余热炉、流化床、煤粉炉、固废炉等。</p><div class="ni-src">业绩说明会 · 5月15日</div></div>
+      <div class="news-item"><span class="ni-tag an">📈 机构增持评级</span><h4>华安证券增持，预计2026年净利6.42亿</h4><p>火电灵活性改造完成第三方测试，NOx排放降40%+。预计2026年销售收入95亿，利润总额10亿。</p><div class="ni-src">新浪财经 · 5月</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: ADVICE ===== -->
+<div class="page" id="page-advice">
+  <div class="section" style="margin-top:14px;">
+    <div class="sec-title"><span class="dot a"></span>操作建议</div>
+
+    <!-- 亨通光电 -->
+    <div class="advice-item" style="border-left-color:var(--blue)">
+      <div class="ai-header">
+        <h3 style="color:var(--blue)">亨通光电 600487 <span class="cat-badge tech">通信光缆</span></h3>
+        <span class="ai-rate bull">积极看多</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>AI数据中心驱动光纤需求爆发，空芯光纤全球领先，Q1净利翻倍。年内涨幅已超200%。
+        <ul>
+          <li class="g">Q1净利+98%，AI长协订单充足</li>
+          <li class="g">空芯光纤商用持续落地，技术壁垒高</li>
+          <li class="g">机构密集调研，280+家关注</li>
+          <li class="r">年内涨幅已大，短期有回调风险</li>
+          <li class="y">建议：强势标的可持有，注意高位波动</li>
+        </ul>
+      </div>
+      <div class="ai-target">机构目标价 <strong>80.82</strong> · 当前 75.78</div>
+    </div>
+
+    <!-- 沪电股份 -->
+    <div class="advice-item" style="border-left-color:var(--green)">
+      <div class="ai-header">
+        <h3 style="color:var(--green)">沪电股份 002463 <span class="cat-badge tech">PCB</span></h3>
+        <span class="ai-rate bull">积极看多</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>AI服务器+高速网络交换机PCB核心供应商，泰国工厂超预期放量。Q1净利+63%。
+        <ul>
+          <li class="g">Q1净利+62.9%，连续多季创新高</li>
+          <li class="g">泰国工厂营收超2025全年，产能利用率90%+</li>
+          <li class="g">布局CoWoP/mSAP前沿技术</li>
+          <li class="r">短期主力资金有流出迹象</li>
+          <li class="b">建议：AI PCB龙头，可中长期持有</li>
+        </ul>
+      </div>
+      <div class="ai-target">机构目标价 <strong>114.5</strong> · 当前 103.58</div>
+    </div>
+
+    <!-- 生益科技 -->
+    <div class="advice-item" style="border-left-color:var(--yellow)">
+      <div class="ai-header">
+        <h3 style="color:var(--yellow)">生益科技 600183 <span class="cat-badge tech">覆铜板</span></h3>
+        <span class="ai-rate bull">谨慎看多</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>覆铜板+PCB双轮驱动，AI服务器+商业航天双概念加持。但高管减持需关注。
+        <ul>
+          <li class="g">Q1净利+44%，产品结构优化</li>
+          <li class="g">AI低损耗材料批量供货，商业航天合作</li>
+          <li class="g">松山湖52亿项目推进中</li>
+          <li class="r">3位高管拟减持，短期涨幅大</li>
+          <li class="y">建议：中期看好，短期注意回调风险</li>
+        </ul>
+      </div>
+      <div class="ai-target">机构目标价 <strong>36.9</strong>（复权）· 关注送转后价格</div>
+    </div>
+
+    <!-- 亨通股份 -->
+    <div class="advice-item" style="border-left-color:var(--pink)">
+      <div class="ai-header">
+        <h3 style="color:var(--pink)">亨通股份 600226 <span class="cat-badge chem">多元</span></h3>
+        <span class="ai-rate wait">谨慎观望</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>营收大增82%但估值高位，铜箔业务有看点。融资客疯狂涌入，风险与机会并存。
+        <ul>
+          <li class="g">Q1营收+82%，氨基酸项目投产</li>
+          <li class="g">铜箔业务国产替代有空间</li>
+          <li class="r">PE 84倍，处历史96%分位</li>
+          <li class="r">股权质押触发风险评级</li>
+          <li class="y">建议：小仓位或观望，注意高估值风险</li>
+        </ul>
+      </div>
+      <div class="ai-target">动态PE <strong>62.44</strong> · 当前 6.03</div>
+    </div>
+
+    <!-- 紫金矿业 -->
+    <div class="advice-item" style="border-left-color:var(--orange)">
+      <div class="ai-header">
+        <h3 style="color:var(--orange)">紫金矿业 601899 <span class="cat-badge resource">矿业</span></h3>
+        <span class="ai-rate mix">回调中关注</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>Q1净利翻倍，铜金价格高位运行。但近期回调明显，主力资金持续流出。
+        <ul>
+          <li class="g">Q1净利+97.5%，业绩爆发式增长</li>
+          <li class="g">机构目标价44.95，空间48%</li>
+          <li class="g">员工持股+分红规划增强信心</li>
+          <li class="r">近5日主力流出约30亿</li>
+          <li class="b">建议：逢回调分批低吸，长线持有</li>
+        </ul>
+      </div>
+      <div class="ai-target">机构目标价 <strong>44.95</strong> · 当前 30.39</div>
+    </div>
+
+    <!-- 景旺电子 -->
+    <div class="advice-item" style="border-left-color:var(--purple)">
+      <div class="ai-header">
+        <h3 style="color:var(--purple)">景旺电子 603228 <span class="cat-badge tech">PCB</span></h3>
+        <span class="ai-rate mix">中期看好</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>AI高端PCB+光模块核心标的，但Q1利润下滑。珠海/泰国新产能即将释放。
+        <ul>
+          <li class="g">AI服务器PCB量产，800G光模块批量供货</li>
+          <li class="g">5月20日大涨7%，主力净买入2.94亿</li>
+          <li class="g">珠海/泰国基地提供中长期产能支撑</li>
+          <li class="r">Q1利润降28%，短期仍有压力</li>
+          <li class="b">建议：关注产能释放节奏，中期布局</li>
+        </ul>
+      </div>
+      <div class="ai-target">机构目标价 <strong>75.43</strong> · 当前 76.26</div>
+    </div>
+
+    <!-- 洛阳钼业 -->
+    <div class="advice-item" style="border-left-color:var(--cyan)">
+      <div class="ai-header">
+        <h3 style="color:var(--cyan)">洛阳钼业 603993 <span class="cat-badge resource">矿业</span></h3>
+        <span class="ai-rate mix">逢低关注</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>铜金钨全面开花，Q1净利+97%。近期连跌4日（-13%），分红在即。
+        <ul>
+          <li class="g">Q1净利+96.7%，铜金双极战略</li>
+          <li class="g">5月27日分红除权，每股派0.286元</li>
+          <li class="g">22家机构买入，目标价25.66</li>
+          <li class="r">近4日跌13%，主力持续流出</li>
+          <li class="b">建议：分红前可关注，中长期持有</li>
+        </ul>
+      </div>
+      <div class="ai-target">机构目标价 <strong>25.66</strong> · 当前 17.96</div>
+    </div>
+
+    <!-- 中国神华 -->
+    <div class="advice-item" style="border-left-color:var(--lime)">
+      <div class="ai-header">
+        <h3 style="color:var(--lime)">中国神华 601088 <span class="cat-badge energy">能源</span></h3>
+        <span class="ai-rate bull">稳健配置</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>煤炭+电力一体化龙头，防守属性强。煤价承压但发电量增长，估值合理。
+        <ul>
+          <li class="g">负债率仅29%，财务极稳健</li>
+          <li class="g">发电量+14.8%，电力业务对冲煤价下行</li>
+          <li class="g">20家机构买入，目标价53.81</li>
+          <li class="r">Q1净利-10.7%，煤价偏弱</li>
+          <li class="b">建议：组合中的防御配置，可长期持有</li>
+        </ul>
+      </div>
+      <div class="ai-target">机构目标价 <strong>53.81</strong> · 当前 46.00</div>
+    </div>
+
+    <!-- 华光环能 -->
+    <div class="advice-item" style="border-left-color:var(--red)">
+      <div class="ai-header">
+        <h3 style="color:var(--red)">华光环能 600475 <span class="cat-badge energy">环保能源</span></h3>
+        <span class="ai-rate wait">关注转型</span>
+      </div>
+      <div class="ai-body">
+        <strong>核心：</strong>氢能+火改+海外三线并进，转型预期强但短期业绩承压。
+        <ul>
+          <li class="g">氢能电解槽技术领先，500MW基地建成</li>
+          <li class="g">火电改造NOx降40%+，2026年订单可期</li>
+          <li class="g">海外多国签约，收入目标+40%</li>
+          <li class="r">Q1营收-6.4%，净利-10%</li>
+          <li class="y">建议：关注氢能+火改订单落地，转型期需耐心</li>
+        </ul>
+      </div>
+      <div class="ai-target">华安证券增持 · 当前 19.18</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: PORTFOLIO ===== -->
+<div class="page" id="page-portfolio">
+  <div class="section" style="margin-top:14px;">
+    <div class="sec-title"><span class="dot p"></span>组合总览</div>
+
+    <div class="pf-card">
+      <h3>📊 持仓速览</h3>
+      <div style="overflow-x:auto">
+      <table class="pf-table">
+        <thead>
+          <tr><th>股票</th><th>代码</th><th>价格</th><th>涨跌</th><th>分类</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>亨通光电</td><td>600487</td><td>75.78</td><td class="vg">+0.41%</td><td style="font-size:0.6rem;color:var(--blue)">通信</td></tr>
+          <tr><td>沪电股份</td><td>002463</td><td>103.58</td><td class="vg">+0.96%</td><td style="font-size:0.6rem;color:var(--green)">PCB</td></tr>
+          <tr><td>生益科技</td><td>600183</td><td>94.18</td><td class="vg">+10.01%</td><td style="font-size:0.6rem;color:var(--yellow)">覆铜板</td></tr>
+          <tr><td>亨通股份</td><td>600226</td><td>6.03</td><td class="vg">+3.79%</td><td style="font-size:0.6rem;color:var(--pink)">多元</td></tr>
+          <tr><td>紫金矿业</td><td>601899</td><td>30.39</td><td class="vr">-2.47%</td><td style="font-size:0.6rem;color:var(--orange)">矿业</td></tr>
+          <tr><td>景旺电子</td><td>603228</td><td>76.26</td><td class="vg">+6.99%</td><td style="font-size:0.6rem;color:var(--purple)">PCB</td></tr>
+          <tr><td>洛阳钼业</td><td>603993</td><td>17.96</td><td class="vr">-1.21%</td><td style="font-size:0.6rem;color:var(--cyan)">矿业</td></tr>
+          <tr><td>中国神华</td><td>601088</td><td>46.00</td><td class="vr">-0.15%</td><td style="font-size:0.6rem;color:var(--lime)">煤炭</td></tr>
+          <tr><td>华光环能</td><td>600475</td><td>19.18</td><td class="vr">-3.81%</td><td style="font-size:0.6rem;color:var(--red)">环保</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="pf-card pf-score">
+      <div class="pf-num">7.5 / 10</div>
+      <div class="pf-label">组合健康评分</div>
+      <div class="pf-desc">
+        <strong>配置结构：</strong>科技制造（亨通光电、沪电、生益、景旺）4只 | 资源矿业（紫金、洛钼）2只 | 能源（神华、华光）2只 | 多元（亨通股份）1只<br>
+        <strong>优势：</strong>科技制造板块处于AI/算力产业链风口，资源品受益于大宗商品高位<br>
+        <strong>风险：</strong>组合偏成长，部分标的近期涨幅较大，资源股有周期波动风险<br>
+        <strong>策略：</strong>核心仓位聚焦AI产业链（亨通光电、沪电），紫金/洛钼逢回调布局，神华作防御底仓
+      </div>
+    </div>
+
+    <div class="pf-card">
+      <h3>📌 今日小结</h3>
+      <div class="ai-body" style="font-size:0.78rem;color:var(--text2);line-height:1.7;">
+        <p>今日9只股票 <strong style="color:var(--text);">5涨4跌</strong>。生益科技涨停（+10.01%）领涨，景旺电子+6.99%紧随其后。资源股普遍回调：紫金-2.47%、洛钼-1.21%、神华-0.15%。华光环能-3.81%领跌。</p>
+        <p style="margin-top:8px;">整体组合风格偏科技成长，今日受益于AI算力产业链的强劲表现。建议继续保持 <strong style="color:var(--green);">亨通光电+沪电股份</strong> 的核心仓位，资源类标的可趁回调逐步布局，神华作为组合稳定器继续持有。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav">
+  <button class="bn-item active" data-page="prices">
+    <span class="bn-icon">📊</span>
+    <span class="bn-label">行情</span>
+  </button>
+  <button class="bn-item" data-page="advice">
+    <span class="bn-icon">💡</span>
+    <span class="bn-label">建议</span>
+  </button>
+  <button class="bn-item" data-page="portfolio">
+    <span class="bn-icon">📋</span>
+    <span class="bn-label">组合</span>
+  </button>
+</nav>
+
+<div class="page-foot">
+  Freya's Stock · 数据来源公开资讯<br>
+  2026年5月20日 · <a href="#" onclick="location.reload()">刷新</a>
+</div>
+
+<script>
+  // ---- Date ----
+  const now = new Date();
+  document.getElementById('headerDate').innerHTML =
+    '<strong>' + now.toLocaleDateString('zh-CN', {month:'long',day:'numeric'}) + '</strong> · ' +
+    now.toLocaleDateString('zh-CN', {weekday:'short'});
+
+  // ---- News Tabs ----
+  const sTabs = document.querySelectorAll('.stock-tab');
+  const sBoxes = document.querySelectorAll('.news-box');
+  sTabs.forEach(t => {
+    t.addEventListener('click', () => {
+      sTabs.forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      sBoxes.forEach(b => b.classList.remove('active'));
+      document.getElementById('n-' + t.dataset.s).classList.add('active');
+    });
+  });
+
+  // ---- Bottom Nav ----
+  const navItems = document.querySelectorAll('.bn-item');
+  const pages = document.querySelectorAll('.page');
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navItems.forEach(x => x.classList.remove('active'));
+      item.classList.add('active');
+      pages.forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + item.dataset.page).classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+
+  // ---- Auto scroll hint ----
+  const tw = document.getElementById('tickerWrap');
+  tw.addEventListener('scroll', () => {
+    document.querySelector('.scroll-hint').style.opacity = '0';
+  });
+</script>
+</body>
+</html>
