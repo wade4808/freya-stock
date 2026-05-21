@@ -1,0 +1,304 @@
+{
+  "update_time": "2026-05-21 14:34:42",
+  "tickers": [
+    "GOOGL",
+    "LI",
+    "BG",
+    "BABA"
+  ],
+  "stocks": {
+    "GOOGL": {
+      "price": 387.665,
+      "change_pct": -0.32,
+      "change_amt": -1.25,
+      "high": 387.85,
+      "low": 383.02,
+      "volume": 4854694,
+      "market_cap": 4696733384704,
+      "name": "谷歌",
+      "sector": "科技",
+      "flow": {
+        "direction": "流出",
+        "amount": 282299242.42649996,
+        "label": "约$282.3M 流出"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        }
+      ],
+      "advice": {
+        "rate": "buy",
+        "rate_text": "强烈买入",
+        "target": "220",
+        "core": "AI搜索+云计算双轮驱动，Gemini生态持续扩展，Q1广告收入超预期",
+        "pros": [
+          "AI搜索市场份额持续扩大",
+          "Google Cloud营收增速30%+",
+          "Gemini API调用量QoQ+150%",
+          "Waymo估值超450亿"
+        ],
+        "cons": [
+          "反垄断监管风险持续",
+          "AI投入资本开支较大"
+        ],
+        "strategy": "核心仓位，建议占总仓位15-20%，逢回调加仓",
+        "risk": "中"
+      },
+      "update_time": "14:34"
+    },
+    "LI": {
+      "price": 16.005,
+      "change_pct": -1.08,
+      "change_amt": -0.18,
+      "high": 16.18,
+      "low": 15.94,
+      "volume": 1094868,
+      "market_cap": 16311812096,
+      "name": "理想汽车",
+      "sector": "新能源车",
+      "flow": {
+        "direction": "流出",
+        "amount": 2628504.351,
+        "label": "约$2.6M 流出"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        }
+      ],
+      "advice": {
+        "rate": "buy",
+        "rate_text": "买入",
+        "target": "45",
+        "core": "增程+纯电双路线并行，L系列持续热销，毛利率领先国内同行",
+        "pros": [
+          "月交付量持续5万+",
+          "毛利率22%行业领先",
+          "智驾全系标配",
+          "海外市场开始拓展"
+        ],
+        "cons": [
+          "市场竞争加剧（问界等）",
+          "纯电车型尚未放量"
+        ],
+        "strategy": "成长仓位，建议8-12%，观察纯电车型表现",
+        "risk": "中高"
+      },
+      "update_time": "14:34"
+    },
+    "BG": {
+      "price": 120.615,
+      "change_pct": 0.55,
+      "change_amt": 0.66,
+      "high": 121.865,
+      "low": 119.17,
+      "volume": 190103,
+      "market_cap": 23401494528,
+      "name": "邦基",
+      "sector": "农业",
+      "flow": {
+        "direction": "流入",
+        "amount": 3439391.00175,
+        "label": "约$3.4M 流入"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        }
+      ],
+      "advice": {
+        "rate": "hold",
+        "rate_text": "持有",
+        "target": "85",
+        "core": "全球粮油贸易龙头，受益于农产品价格波动，分红稳定",
+        "pros": [
+          "全球农产品贸易份额领先",
+          "分红率3.5%+",
+          "巴西阿根廷大豆贸易强劲"
+        ],
+        "cons": [
+          "农产品价格周期性波动",
+          "地缘政治影响供应链"
+        ],
+        "strategy": "防御仓位，建议5-8%，作为组合稳定器",
+        "risk": "低中"
+      },
+      "update_time": "14:34"
+    },
+    "BABA": {
+      "price": 128.99,
+      "change_pct": -4.08,
+      "change_amt": -5.48,
+      "high": 129.9,
+      "low": 128.09,
+      "volume": 4903996,
+      "market_cap": 309464301568,
+      "name": "阿里巴巴",
+      "sector": "电商",
+      "flow": {
+        "direction": "流出",
+        "amount": 94884966.606,
+        "label": "约$94.9M 流出"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance",
+          "date": "",
+          "link": ""
+        }
+      ],
+      "advice": {
+        "rate": "buy",
+        "rate_text": "买入",
+        "target": "135",
+        "core": "云+AI+电商重塑增长，阿里云利润爆发，国际电商高速增长",
+        "pros": [
+          "阿里云利润率持续改善",
+          "国际电商增速40%+",
+          "AI大模型通义千问领先",
+          "股票回购力度大"
+        ],
+        "cons": [
+          "国内消费复苏不确定性",
+          "监管环境变化",
+          "拼多多/抖音竞争"
+        ],
+        "strategy": "核心仓位，建议12-18%，长期持有等待云+AI估值重估",
+        "risk": "中"
+      },
+      "update_time": "14:34"
+    }
+  },
+  "portfolio": {
+    "invested_pct": 40,
+    "floating_pnl_pct": -10,
+    "goal": "稳定持续增长"
+  }
+}
