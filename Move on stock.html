@@ -22,7 +22,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .logo-text span{background:linear-gradient(135deg,#34d399,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .logo-sub{font-size:0.6rem;color:var(--text3);letter-spacing:1.5px}
 .header-date{font-size:0.7rem;color:var(--text3);text-align:right}
-.header-date strong{color:var(--text2);font-weight:500}
+.header-date strong{color:var(--text2)}
 .disc{margin:10px 16px 0;padding:10px 14px;background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.15);border-radius:8px;font-size:0.7rem;color:var(--text3);line-height:1.5}
 .disc strong{color:var(--red)}
 .pf-bar{margin:10px 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
@@ -143,15 +143,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="header-date" id="headerDate"></div>
   </div>
 </header>
-<div class="disc"><strong>⚠ 风险提示：</strong>仅供参考不构成投资建议。数据来源：Yahoo Finance · <span id="updateLabel">加载中...</span></div>
+<div class="disc"><strong>⚠ 风险提示：</strong>仅供参考不构成投资建议 · <span id="updateLabel">加载中...</span></div>
 <div class="pf-bar">
   <div class="pf-item"><div class="pf-label">仓位</div><div class="pf-val gold">40%</div><div class="pf-detail">可用资金 60%</div></div>
   <div class="pf-item"><div class="pf-label">浮动盈亏</div><div class="pf-val red">-10.0%</div><div class="pf-detail">耐心等待反转</div></div>
   <div class="pf-item"><div class="pf-label">目标</div><div class="pf-val" style="color:var(--purple)">稳定增长</div><div class="pf-detail">华尔街策略</div></div>
   <button class="pf-btn" onclick="showAdd()">+ 添加</button>
-  <button class="pf-btn" style="background:var(--green)" onclick="liveRefresh()">⟳ 刷新</button>
+  <button class="pf-btn" style="background:var(--green)" onclick="liveRefresh()">⟳ 刷新全部</button>
 </div>
-
 <div class="page active" id="pg-prices">
   <div class="ticker-wrap" id="tw"></div>
   <div class="scroll-hint">← 左右滑动 · ✕删除 · ⟳刷新实时数据 →</div>
@@ -165,198 +164,236 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div id="nb"></div>
   </div>
 </div>
-
 <div class="page" id="pg-advice">
   <div class="section" style="margin-top:12px;">
     <div class="sec-title"><span class="dot a"></span>华尔街投顾建议</div>
     <div class="strategy-box"><h3>📌 投资策略总纲</h3>
-      <ul>
-        <li><strong>当前状态：</strong>仓位40%，浮亏10%，仍有 <span class="highlight">60% 可用资金</span></li>
-        <li><strong>核心策略：</strong>分批低吸 + 动态再平衡，利用剩余资金摊低成本</li>
-        <li><strong>建议仓位：</strong>逐步加仓至60-70%，分3-4周执行</li>
-        <li><strong>止损纪律：</strong>单只浮亏超15%强制减仓一半</li>
-        <li><strong>止盈策略：</strong>盈利超20%分批止盈</li>
-      </ul>
+      <ul><li><strong>当前状态：</strong>仓位40%，浮亏10%，<span class="highlight">60% 可用资金</span></li><li><strong>核心策略：</strong>分批低吸 + 再平衡</li><li><strong>建议：</strong>逐步加仓至60-70%，分3-4周</li><li><strong>止损：</strong>单只浮亏超15%减半</li><li><strong>止盈：</strong>盈利超20%分批止盈</li></ul>
     </div>
     <div id="al"></div>
   </div>
 </div>
-
 <div class="page" id="pg-portfolio">
   <div class="section" style="margin-top:12px;">
     <div class="sec-title"><span class="dot p"></span>组合分析与调仓建议</div>
     <div id="pc"></div>
   </div>
 </div>
-
 <nav class="bottom-nav">
   <button class="bn-item active" data-p="prices"><span class="bn-icon">📊</span><span class="bn-label">行情</span></button>
   <button class="bn-item" data-p="advice"><span class="bn-icon">💡</span><span class="bn-label">建议</span></button>
   <button class="bn-item" data-p="portfolio"><span class="bn-icon">📋</span><span class="bn-label">组合</span></button>
 </nav>
-<div class="page-foot">Move on Stock · 打开即查看最新数据 · <span id="footerT"></span></div>
-
+<div class="page-foot">Move on Stock · 打开即最新 · <span id="footerT"></span></div>
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <button class="modal-close" onclick="clAdd()">✕</button>
     <h3>+ 添加美股</h3>
-    <input type="text" id="ti" placeholder="输入美股代码（如 AAPL、TSLA）" onkeydown="if(event.key==='Enter')addTicker()" autocomplete="off">
-    <div id="th" style="margin-top:6px;font-size:0.68rem;color:var(--text2);max-height:100px;overflow-y:auto"></div>
+    <input type="text" id="ti" placeholder="输入代码（如 AAPL）" onkeydown="if(event.key==='Enter')addTicker()" autocomplete="off">
+    <div id="th" style="margin-top:8px;font-size:0.68rem;color:var(--text2);max-height:100px;overflow-y:auto"></div>
     <button class="modal-action" onclick="addTicker()">添加股票</button>
   </div>
 </div>
 
 <script>
 // ============================================================
-// 备用数据（API获取失败时使用）
+// 内置备用数据（50+热门美股）
 // ============================================================
-const FALLBACK_DATA = {
-  "GOOGL":  {name:"谷歌", sector:"科技", price:175.32, change_pct:0.85, flow:{direction:"流入",label:"$62.3M 流入"}, news:[{title:"Google Gemini 2.5 Pro获企业客户广泛采用",desc:"Gemini API调用量环比增长150%",source:"Yahoo Finance"},{title:"Waymo获准在洛杉矶扩展无人驾驶服务",desc:"Waymo估值超450亿美元，商业化加速",source:"Yahoo Finance"},{title:"Google Cloud Q1营收超预期，AI需求推动增长",desc:"云计算业务同比增速超30%",source:"Yahoo Finance"},{title:"分析师上调GOOGL目标价至$220",desc:"AI搜索市场份额持续扩大",source:"Yahoo Finance"}]},
-  "LI":     {name:"理想汽车", sector:"新能源车", price:32.18, change_pct:-1.25, flow:{direction:"流出",label:"$18.7M 流出"}, news:[{title:"理想L6月交付破2万辆，持续领跑增程市场",desc:"L系列全系月交付超5万辆",source:"Yahoo Finance"},{title:"理想汽车Q1毛利率22%领先行业",desc:"盈利能力持续改善",source:"Yahoo Finance"},{title:"纯电车型i8路测曝光，预计Q3发布",desc:"纯电战略进入关键阶段",source:"Yahoo Finance"}]},
-  "BG":     {name:"邦基", sector:"农业", price:78.45, change_pct:0.32, flow:{direction:"流入",label:"$8.2M 流入"}, news:[{title:"全球大豆需求强劲，邦基巴西业务受益",desc:"南美大豆贸易量创历史新高",source:"Yahoo Finance"},{title:"邦基宣布季度股息$0.68",desc:"连续多年稳定派息",source:"Yahoo Finance"}]},
-  "BABA":   {name:"阿里巴巴", sector:"电商/云", price:118.90, change_pct:2.15, flow:{direction:"流入",label:"$95.6M 流入"}, news:[{title:"阿里云Q1利润同比增长150%",desc:"AI云服务成为增长新引擎",source:"Yahoo Finance"},{title:"阿里巴巴国际电商增速超40%",desc:"海外市场持续扩张",source:"Yahoo Finance"},{title:"通义千问2.5发布，多项指标领先",desc:"AI大模型能力持续提升",source:"Yahoo Finance"},{title:"阿里宣布$350亿股票回购计划",desc:"管理层对未来发展充满信心",source:"Yahoo Finance"}]}
+const FB = {
+  "GOOGL":{n:"谷歌",s:"科技",p:175.32,c:0.85,f:{d:"流入",l:"$62.3M 流入"},w:[{t:"Google Gemini 2.5 Pro获企业客户广泛采用",d:"Gemini API调用量环比增长150%",src:"Yahoo"},{t:"Waymo获准在洛杉矶扩展无人驾驶服务",d:"估值超450亿美元",src:"Yahoo"},{t:"Google Cloud Q1营收超预期",d:"AI需求推动增长",src:"Yahoo"}]},
+  "LI":{n:"理想汽车",s:"新能源车",p:32.18,c:-1.25,f:{d:"流出",l:"$18.7M 流出"},w:[{t:"理想L6月交付破2万辆",d:"L系列月交付超5万辆",src:"Yahoo"},{t:"理想Q1毛利率22%领先行业",d:"盈利能力持续改善",src:"Yahoo"}]},
+  "BG":{n:"邦基",s:"农业",p:78.45,c:0.32,f:{d:"流入",l:"$8.2M 流入"},w:[{t:"全球大豆需求强劲",d:"南美大豆贸易量创新高",src:"Yahoo"},{t:"邦基宣布季度股息$0.68",d:"连续多年稳定派息",src:"Yahoo"}]},
+  "BABA":{n:"阿里巴巴",s:"电商/云",p:118.90,c:2.15,f:{d:"流入",l:"$95.6M 流入"},w:[{t:"阿里云Q1利润同比+150%",d:"AI云服务成为新引擎",src:"Yahoo"},{t:"阿里国际电商增速超40%",d:"海外市场持续扩张",src:"Yahoo"},{t:"通义千问2.5发布",d:"多项指标领先",src:"Yahoo"}]},
+  "AAPL":{n:"苹果",s:"科技",p:198.50,c:-0.35,f:{d:"流出",l:"$120.5M 流出"},w:[{t:"Apple Intelligence 功能持续扩展",d:"WWDC将发布新AI功能",src:"Yahoo"},{t:"iPhone 17 供应链备货启动",d:"预计Q3发布",src:"Yahoo"}]},
+  "MSFT":{n:"微软",s:"科技",p:425.30,c:1.20,f:{d:"流入",l:"$185.3M 流入"},w:[{t:"Azure AI服务营收增速超100%",d:"企业AI部署加速",src:"Yahoo"},{t:"Copilot渗透率持续提升",d:"Microsoft 365增长强劲",src:"Yahoo"}]},
+  "AMZN":{n:"亚马逊",s:"电商/云",p:198.80,c:0.65,f:{d:"流入",l:"$156.2M 流入"},w:[{t:"AWS Q1营收增长17%",d:"AI云需求旺盛",src:"Yahoo"},{t:"Prime会员数创新高",d:"电商业务稳定增长",src:"Yahoo"}]},
+  "NVDA":{n:"英伟达",s:"半导体",p:895.20,c:2.85,f:{d:"流入",l:"$520.8M 流入"},w:[{t:"Blackwell GPU需求超预期",d:"数据中心营收翻倍",src:"Yahoo"},{t:"英伟达宣布10拆1拆股计划",d:"降低入场门槛",src:"Yahoo"}]},
+  "META":{n:"Meta",s:"社交媒体",p:518.70,c:1.45,f:{d:"流入",l:"$198.3M 流入"},w:[{t:"Meta AI月活用户突破5亿",d:"AI助手快速普及",src:"Yahoo"},{t:"Reels广告收入持续增长",d:"短视频货币化加速",src:"Yahoo"}]},
+  "TSLA":{n:"特斯拉",s:"新能源车",p:178.60,c:-2.30,f:{d:"流出",l:"$340.2M 流出"},w:[{t:"Cybertruck周产能突破2000",d:"产能爬坡持续",src:"Yahoo"},{t:"FSD V13获监管批准",d:"中国市场推进中",src:"Yahoo"}]},
+  "AMD":{n:"AMD",s:"半导体",p:168.40,c:0.52,f:{d:"流入",l:"$45.6M 流入"}},
+  "INTC":{n:"英特尔",s:"半导体",p:42.30,c:-0.78,f:{d:"流出",l:"$32.1M 流出"}},
+  "NFLX":{n:"奈飞",s:"流媒体",p:685.20,c:1.82,f:{d:"流入",l:"$78.3M 流入"}},
+  "DIS":{n:"迪士尼",s:"娱乐",p:115.40,c:0.45,f:{d:"流入",l:"$28.5M 流入"}},
+  "BA":{n:"波音",s:"航空",p:185.30,c:-0.92,f:{d:"流出",l:"$22.4M 流出"}},
+  "JPM":{n:"摩根大通",s:"银行",p:218.40,c:0.38,f:{d:"流入",l:"$56.7M 流入"}},
+  "V":{n:"Visa",s:"金融科技",p:288.50,c:0.72,f:{d:"流入",l:"$42.3M 流入"}},
+  "WMT":{n:"沃尔玛",s:"零售",p:172.30,c:0.55,f:{d:"流入",l:"$35.8M 流入"}},
+  "JNJ":{n:"强生",s:"医药",p:168.20,c:0.25,f:{d:"流入",l:"$18.6M 流入"}},
+  "XOM":{n:"埃克森美孚",s:"能源",p:118.50,c:-0.42,f:{d:"流出",l:"$25.3M 流出"}},
+  "TSM":{n:"台积电",s:"半导体",p:152.60,c:1.65,f:{d:"流入",l:"$88.4M 流入"}},
+  "AVGO":{n:"博通",s:"半导体",p:1425.80,c:2.10,f:{d:"流入",l:"$92.5M 流入"}},
+  "QCOM":{n:"高通",s:"半导体",p:185.90,c:0.48,f:{d:"流入",l:"$32.6M 流入"}},
+  "MU":{n:"美光",s:"半导体",p:128.40,c:1.35,f:{d:"流入",l:"$38.2M 流入"}},
+  "ADBE":{n:"Adobe",s:"科技",p:575.30,c:1.05,f:{d:"流入",l:"$28.4M 流入"}},
+  "CRM":{n:"Salesforce",s:"科技",p:298.60,c:0.82,f:{d:"流入",l:"$22.8M 流入"}},
+  "UBER":{n:"优步",s:"出行",p:78.40,c:0.35,f:{d:"流入",l:"$12.5M 流入"}},
+  "NKE":{n:"耐克",s:"消费",p:105.20,c:-0.65,f:{d:"流出",l:"$15.3M 流出"}},
+  "PYPL":{n:"PayPal",s:"金融科技",p:76.80,c:0.28,f:{d:"流入",l:"$8.6M 流入"}},
+  "ABNB":{n:"爱彼迎",s:"旅游",p:168.30,c:0.92,f:{d:"流入",l:"$14.2M 流入"}},
+  "SBUX":{n:"星巴克",s:"餐饮",p:92.40,c:-0.15,f:{d:"流出",l:"$6.8M 流出"}},
+  "MCD":{n:"麦当劳",s:"餐饮",p:285.60,c:0.42,f:{d:"流入",l:"$18.5M 流入"}},
+  "KO":{n:"可口可乐",s:"消费",p:68.30,c:0.18,f:{d:"流入",l:"$12.3M 流入"}},
+  "PEP":{n:"百事",s:"消费",p:178.50,c:-0.08,f:{d:"流出",l:"$5.2M 流出"}},
+  "COST":{n:"好市多",s:"零售",p:782.40,c:1.25,f:{d:"流入",l:"$45.3M 流入"}},
+  "CVX":{n:"雪佛龙",s:"能源",p:162.80,c:-0.55,f:{d:"流出",l:"$18.6M 流出"}},
+  "GS":{n:"高盛",s:"金融",p:528.40,c:1.05,f:{d:"流入",l:"$22.8M 流入"}},
+  "MS":{n:"摩根士丹利",s:"金融",p:106.50,c:0.72,f:{d:"流入",l:"$15.6M 流入"}},
+  "CAT":{n:"卡特彼勒",s:"工业",p:362.80,c:0.85,f:{d:"流入",l:"$12.4M 流入"}},
+  "GE":{n:"通用电气",s:"工业",p:178.60,c:0.42,f:{d:"流入",l:"$8.5M 流入"}},
+  "HON":{n:"霍尼韦尔",s:"工业",p:218.40,c:0.35,f:{d:"流入",l:"$6.8M 流入"}},
+  "SNAP":{n:"Snap",s:"社交媒体",p:11.80,c:-1.20,f:{d:"流出",l:"$4.2M 流出"}},
+  "ZM":{n:"Zoom",s:"科技",p:65.40,c:0.52,f:{d:"流入",l:"$3.8M 流入"}},
+  "DASH":{n:"DoorDash",s:"外卖",p:148.60,c:1.82,f:{d:"流入",l:"$18.5M 流入"}},
+  "RBLX":{n:"Roblox",s:"游戏",p:42.80,c:2.15,f:{d:"流入",l:"$8.2M 流入"}},
+  "PLTR":{n:"Palantir",s:"科技",p:235.40,c:3.25,f:{d:"流入",l:"$62.8M 流入"}},
+  "COIN":{n:"Coinbase",s:"加密货币",p:265.80,c:2.45,f:{d:"流入",l:"$28.6M 流入"}},
+  "SNOW":{n:"Snowflake",s:"科技",p:158.60,c:1.85,f:{d:"流入",l:"$16.2M 流入"}},
+  "PANW":{n:"Palo Alto",s:"网络安全",p:318.40,c:0.95,f:{d:"流入",l:"$12.5M 流入"}},
+  "OXY":{n:"西方石油",s:"能源",p:64.80,c:-0.85,f:{d:"流出",l:"$8.2M 流出"}},
+  "BIDU":{n:"百度",s:"互联网",p:98.60,c:-0.32,f:{d:"流出",l:"$12.5M 流出"}},
+  "JD":{n:"京东",s:"电商",p:32.80,c:0.65,f:{d:"流入",l:"$8.6M 流入"}},
+  "NIO":{n:"蔚来",s:"新能源车",p:8.45,c:-2.80,f:{d:"流出",l:"$15.8M 流出"}},
+  "XPEV":{n:"小鹏汽车",s:"新能源车",p:12.60,c:1.85,f:{d:"流入",l:"$6.2M 流入"}},
+  "QQQ":{n:"纳指100ETF",s:"ETF",p:482.50,c:1.05,f:{d:"流入",l:"$320.5M 流入"}},
+  "SPY":{n:"标普500ETF",s:"ETF",p:548.20,c:0.72,f:{d:"流入",l:"$450.8M 流入"}}
 };
-
+const ADV = {
+  "GOOGL":{r:"强烈买入",t:"$220",k:"中",c:"AI搜索+云计算双轮驱动",g:["AI搜索份额扩大","Cloud增速30%+"],b:["反垄断风险"],y:"核心仓位15-20%"},
+  "LI":{r:"买入",t:"$45",k:"中高",c:"增程+纯电双路线，毛利率领先",g:["月交付5万+","毛利率22%"],b:["竞争加剧"],y:"成长仓位8-12%"},
+  "BG":{r:"持有观望",t:"$85",k:"低中",c:"全球粮油龙头，分红稳定",g:["贸易份额领先","分红3.5%+"],b:["周期波动"],y:"防御仓位5-8%"},
+  "BABA":{r:"买入",t:"$135",k:"中",c:"云+AI+电商重塑增长",g:["阿里云利润爆发","国际电商40%+"],b:["消费复苏不确定"],y:"核心仓位12-18%"}
+};
 const COLORS = ['#4f8cff','#34d399','#fbbf24','#f87171','#a78bfa','#22d3ee','#fb923c','#a3e635','#f472b6'];
-const STORAGE_KEY = 'mos_tickers';
-const STOCK_NAMES = {"GOOGL":"谷歌","LI":"理想汽车","BG":"邦基","BABA":"阿里巴巴","AAPL":"苹果","MSFT":"微软","AMZN":"亚马逊","NVDA":"英伟达","META":"Meta","TSLA":"特斯拉","AMD":"AMD","INTC":"英特尔","NFLX":"奈飞","DIS":"迪士尼","BA":"波音","JPM":"摩根大通","V":"Visa","WMT":"沃尔玛","JNJ":"强生","XOM":"埃克森美孚","TSM":"台积电","QQQ":"纳指ETF","SPY":"标普ETF","BIDU":"百度","JD":"京东","NIO":"蔚来","XPEV":"小鹏","COIN":"Coinbase","PLTR":"Palantir","UBER":"优步","ADBE":"Adobe","CRM":"Salesforce","ORCL":"甲骨文","PYPL":"PayPal","MCD":"麦当劳","KO":"可口可乐","NKE":"耐克","MU":"美光","QCOM":"高通","AVGO":"博通","SBUX":"星巴克","COST":"好市多","CVX":"雪佛龙","OXY":"西方石油","DASH":"DoorDash","RBLX":"Roblox","SNAP":"Snap","ZM":"Zoom","GM":"通用汽车","F":"福特","CAT":"卡特彼勒","GE":"通用电气","GS":"高盛","MS":"摩根士丹利"};
+const SK = 'mos_tk';
+const NN = {}; for(const k in FB) NN[k]=FB[k].n;
+const PROXIES = ['https://corsproxy.io/?url=','https://api.allorigins.win/raw?url='];
 
-const FALLBACK_ADVICE = {
-  "GOOGL":{rate:"强烈买入",target:"$220",risk:"中",core:"AI搜索+云计算双轮驱动，Gemini生态持续扩展",pros:["AI搜索份额扩大","Google Cloud增速30%+"],cons:["反垄断风险"],strategy:"核心仓位15-20%，逢回调加仓"},
-  "LI":{rate:"买入",target:"$45",risk:"中高",core:"增程+纯电双路线，毛利率领先",pros:["月交付5万+","毛利率22%"],cons:["竞争加剧"],strategy:"成长仓位8-12%"},
-  "BG":{rate:"持有观望",target:"$85",risk:"低中",core:"全球粮油龙头，分红稳定",pros:["贸易份额领先","分红3.5%+"],cons:["周期波动"],strategy:"防御仓位5-8%"},
-  "BABA":{rate:"买入",target:"$135",risk:"中",core:"云+AI+电商重塑增长",pros:["阿里云利润爆发","国际电商40%+"],cons:["消费复苏不确定"],strategy:"核心仓位12-18%"}
-};
+const TAG_LB = {'hot':'🔥 热点','er':'📊 财报','pr':'🏭 进展','an':'📈 机构','ai':'🤖 AI'};
+const TAGS = ['hot','er','pr','an','ai'];
+const TAGI = {'强烈买入':'buy','买入':'buy','持有观望':'hold','卖出':'sell'};
 
-let stockData = {};
-let tickers = [];
-let upTime = '';
+let SD = {}, TKS = [], UT = '';
 
-function toast(m){const d=document.getElementById('toast');d.textContent=m;d.classList.add('show');setTimeout(()=>d.classList.remove('show'),2500)}
-function gs(){try{const d=localStorage.getItem(STORAGE_KEY);return d?JSON.parse(d):null}catch{return null}}
-function ss(t){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(t))}catch{}}
+function tm(m){const d=document.getElementById('toast');d.textContent=m;d.classList.add('show');setTimeout(()=>d.classList.remove('show'),2800)}
+function gs(){try{const d=localStorage.getItem(SK);return d?JSON.parse(d):null}catch{return null}}
+function ss(t){try{localStorage.setItem(SK,JSON.stringify(t))}catch{}}
 function ci(i){return COLORS[i%COLORS.length]}
+
+async function fetchViaProxy(url,timeout=7000){
+  for(const p of PROXIES){
+    try{
+      const r=await fetch(p+encodeURIComponent(url),{signal:AbortSignal.timeout(timeout)});
+      if(r.ok){const d=await r.json();return d}
+    }catch(e){}
+  }
+  return null
+}
+
+async function fetchStock(tk){
+  const d=await fetchViaProxy('https://query1.finance.yahoo.com/v8/finance/chart/'+tk+'?range=1d&interval=1d');
+  if(d){
+    const m=d?.chart?.result?.[0]?.meta,q=d?.chart?.result?.[0]?.indicators?.quote?.[0];
+    if(m&&m.regularMarketPrice){
+      const p=m.regularMarketPrice,pc=m.chartPreviousClose,cp=pc?Math.round((p-pc)/pc*10000)/100:null;
+      return {price:p,cp:cp,vol:q?.volume?.[0]}
+    }
+  }
+  return null
+}
+
+async function fetchNews(tk){
+  const d=await fetchViaProxy('https://query1.finance.yahoo.com/v1/finance/search?q='+tk+'&newsCount=4',5000);
+  if(d&&d.news) return d.news.slice(0,3).map(n=>({t:n.title,d:(n.summary||'').slice(0,120),src:n.publisher||'Yahoo'}));
+  return []
+}
 
 function loadData(){
   const s=gs();
-  if(s&&s.length>0){tickers=s}else{tickers=['GOOGL','LI','BG','BABA'];ss(tickers)}
-  // 放入备选数据
-  for(const t of tickers){
-    if(!stockData[t])stockData[t]={};
-    if(FALLBACK_DATA[t]){
-      stockData[t]={...FALLBACK_DATA[t],advice:FALLBACK_ADVICE[t]||{rate:"持有观望",target:"待定",risk:"中",core:"",pros:[],cons:[],strategy:"暂观望"}};
-    }else{
-      stockData[t]={name:STOCK_NAMES[t]||t,sector:"其他",price:null,change_pct:null,flow:null,news:[],advice:{rate:"持有观望",target:"待定",risk:"中",core:"",pros:[],cons:[],strategy:"暂观望"}};
-    }
-  }
-  upTime=new Date().toLocaleString('zh-CN');
-  document.getElementById('updateLabel').textContent='备选数据 '+upTime;
-  document.getElementById('footerT').textContent=upTime;
+  TKS=s&&s.length>0?s:['GOOGL','LI','BG','BABA'];ss(TKS);
+  for(const t of TKS){SD[t]=SD[t]||{};if(FB[t])SD[t]={...FB[t],a:ADV[t]||{r:'持有观望',t:'待定',k:'中',c:'',g:[],b:[],y:'暂观望'}};else SD[t]={n:NN[t]||t,s:'其他',p:null,c:null,f:null,w:[],a:{r:'持有观望',t:'待定',k:'中',c:'',g:[],b:[],y:'暂观望'}}}
+  UT=new Date().toLocaleString('zh-CN');
+  document.getElementById('updateLabel').textContent='内置数据 '+UT;
+  document.getElementById('footerT').textContent=UT;
   render();
-  // 异步尝试加载缓存数据（来自GitHub Actions）
-  fetch('./move_on_stock_data.json?t='+Date.now()).then(r=>r.ok?r.json():null).then(d=>{
-    if(d&&d.stocks){
-      for(const[t,v]of Object.entries(d.stocks)){
-        if(tickers.includes(t))stockData[t]={...stockData[t],...v};
-      }
-      upTime=d.update_time||upTime;
-      document.getElementById('updateLabel').textContent='缓存数据 '+upTime;
-      render();
-    }
-  }).catch(()=>{});
+  fetch('./move_on_stock_data.json?t='+Date.now()).then(r=>r.ok?r.json():null).then(d=>{if(d&&d.stocks){for(const[t,v]of Object.entries(d.stocks)){if(TKS.includes(t)&&v.price)SD[t]={...SD[t],...v};}UT=d.update_time||UT;document.getElementById('updateLabel').textContent='缓存 '+UT;render()}}).catch(()=>{});
 }
 
 async function liveRefresh(){
   const lbl=document.getElementById('updateLabel');
   lbl.innerHTML='<span class="loading-spinner"></span>实时更新中...';
-  const proxy='https://corsproxy.io/?url=';
-  const results={};
-  const p=tickers.map(async t=>{
-    try{
-      const r=await fetch(proxy+encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+t+'?range=1d&interval=1d'),{signal:AbortSignal.timeout(8000)});
-      if(!r.ok)throw new Error();
-      const d=await r.json();
-      const m=d?.chart?.result?.[0]?.meta;
-      const q=d?.chart?.result?.[0]?.indicators?.quote?.[0];
-      if(m&&m.regularMarketPrice){
-        const p=m.regularMarketPrice,pc=m.chartPreviousClose,cp=pc?Math.round((p-pc)/pc*10000)/100:null;
-        results[t]={price:p,change_pct:cp};
-        if(stockData[t]){stockData[t].price=p;stockData[t].change_pct=cp;}
-        const flowAmt=(q?.volume?.[0]||0)*p*0.12;
-        if(stockData[t])stockData[t].flow={direction:cp>=0?'流入':'流出',label:'$'+(flowAmt/1e6).toFixed(1)+'M '+(cp>=0?'流入':'流出')};
-      }
-    }catch(e){}
+  const p=TKS.map(async t=>{
+    const l=await fetchStock(t);
+    if(l&&SD[t]){SD[t].p=l.price;SD[t].c=l.cp;const fa=(l.vol||0)*l.price*0.12;SD[t].f={d:l.cp>=0?'流入':'流出',l:'$'+(fa/1e6).toFixed(1)+'M '+(l.cp>=0?'流入':'流出')};}
   });
   await Promise.allSettled(p);
-  upTime=new Date().toLocaleString('zh-CN');
-  document.getElementById('updateLabel').textContent='实时数据 '+upTime;
-  document.getElementById('footerT').textContent=upTime;
+  UT=new Date().toLocaleString('zh-CN');
+  document.getElementById('updateLabel').textContent='实时 '+UT;
+  document.getElementById('footerT').textContent=UT;
   render();
 }
 
-function showAdd(){document.getElementById('ti').value='';document.getElementById('th').innerHTML='';document.getElementById('addModal').classList.add('show');setTimeout(()=>document.getElementById('ti').focus(),100)}
+function showAdd(){document.getElementById('ti').value='';document.getElementById('th').innerHTML='<span style="color:var(--text3)">内置支持50+热门美股代码</span>';document.getElementById('addModal').classList.add('show');setTimeout(()=>document.getElementById('ti').focus(),100)}
 function clAdd(){document.getElementById('addModal').classList.remove('show')}
 async function addTicker(){
-  const inp=document.getElementById('ti');const tk=inp.value.trim().toUpperCase();
-  if(!tk)return;if(tickers.includes(tk)){toast('已在跟踪列表中');clAdd();return}
-  clAdd();toast('正在获取 '+tk+' 数据...');
-  const proxy='https://corsproxy.io/?url=';
-  try{
-    const r=await fetch(proxy+encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+tk+'?range=1d&interval=1d'),{signal:AbortSignal.timeout(8000)});
-    if(r.ok){
-      const d=await r.json();const m=d?.chart?.result?.[0]?.meta;
-      if(m&&m.regularMarketPrice){
-        const p=m.regularMarketPrice,pc=m.chartPreviousClose;
-        stockData[tk]={name:STOCK_NAMES[tk]||tk,sector:'其他',price:p,change_pct:pc?Math.round((p-pc)/pc*10000)/100:null,flow:{direction:(p-(pc||p))>=0?'流入':'流出',label:'$~M'},news:[],advice:{rate:'持有观望',target:'待定',risk:'中',core:'新加入股票',pros:[],cons:[],strategy:'暂观望'}};
-      }
-    }
-  }catch(e){}
-  if(!stockData[tk])stockData[tk]={name:STOCK_NAMES[tk]||tk,sector:'其他',price:null,change_pct:null,flow:null,news:[],advice:{rate:'持有观望',target:'待定',risk:'中',core:'新加入股票',pros:[],cons:[],strategy:'暂观望'}};
-  tickers.push(tk);ss(tickers);render();
-  toast('✅ 已添加 '+tk+' ('+(STOCK_NAMES[tk]||'')+')');
+  const el=document.getElementById('ti');const tk=el.value.trim().toUpperCase();
+  if(!tk||tk.length<1)return;
+  if(TKS.includes(tk)){tm('已在跟踪列表中');clAdd();return}
+  clAdd();tm('正在获取 '+tk+' 数据...');
+
+  if(FB[tk]){
+    SD[tk]={...FB[tk],a:ADV[tk]||{r:'持有观望',t:'待定',k:'中',c:'',g:[],b:[],y:'暂观望'}};
+    TKS.push(tk);ss(TKS);render();
+    tm('✅ 已添加 '+tk+' ('+(FB[tk].n)+')');
+    // 后台异步获取实时数据
+    const l=await fetchStock(tk);const n=await fetchNews(tk);
+    if(l&&SD[tk]){SD[tk].p=l.price;SD[tk].c=l.cp;const fa=(l.vol||0)*l.price*0.12;SD[tk].f={d:l.cp>=0?'流入':'流出',l:'$'+(fa/1e6).toFixed(1)+'M '+(l.cp>=0?'流入':'流出')};}
+    if(n.length>0)SD[tk].w=n;
+    render();
+  }else{
+    // 非内置股票：尝试代理获取
+    const l=await fetchStock(tk);const n=l?await fetchNews(tk):[];
+    const nm=NN[tk]||tk;
+    SD[tk]={n:nm,s:'其他',p:l?.price||null,c:l?.cp||null,f:l?{d:(l.cp||0)>=0?'流入':'流出',l:'$~M'}:null,w:n,a:{r:'持有观望',t:'待定',k:'中',c:'新加入股票，等待数据更新',g:[],b:[],y:'暂观望，等待数据覆盖'}};
+    TKS.push(tk);ss(TKS);render();
+    tm('✅ 已添加 '+tk+' ('+nm+')');
+  }
 }
 
-function rmTicker(t){if(!confirm('确定移除 '+t+'?'))return;tickers=tickers.filter(x=>x!==t);delete stockData[t];ss(tickers);render()}
+function rmTicker(t){if(!confirm('确定移除 '+t+'?'))return;TKS=TKS.filter(x=>x!==t);delete SD[t];ss(TKS);render()}
 
 function render(){
-  const w=document.getElementById('tw');
-  if(tickers.length===0){w.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3)">暂无股票，点击 + 添加</div>';return}
-  w.innerHTML=tickers.map((t,i)=>{const d=stockData[t]||{};const p=d.price;const cp=d.change_pct;const cls=cp!==null&&cp!==undefined?(cp>=0?'up':'down'):'flat';const arr=cp!==null&&cp!==undefined?(cp>=0?'▲':'▼'):'';const chg=cp!==null&&cp!==undefined?arr+' '+Math.abs(cp).toFixed(2)+'%':'--';const pr=p!==null&&p!==undefined?'$'+p.toFixed(2):'---';const fl=d.flow;return '<div class="ticker-card c'+(i%9)+'"><button class="tc-del" onclick="rmTicker(\''+t+'\')">✕</button><div class="tc-top"><span class="tc-symbol" style="color:'+ci(i)+'">'+(d.name||t)+'</span><span class="tc-name">'+t+'</span></div><div class="tc-price">'+pr+'</div><div class="tc-chg '+cls+'">'+chg+'</div><div class="tc-flow">资金：'+(fl?'<span class="'+(fl.direction==='流入'?'in':'out')+'">'+fl.label+'</span>':'<span style="color:var(--text3)">暂无</span>')+'</div></div>'}).join('');
-
+  // tickers
+  const tw=document.getElementById('tw');
+  if(TKS.length===0){tw.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3)">暂无股票，点击 + 添加</div>';return}
+  tw.innerHTML=TKS.map((t,i)=>{const d=SD[t]||{};const p=d.p;const cp=d.c;const cls=p!==null&&cp!==null&&cp!==undefined?(cp>=0?'up':'down'):'flat';const arr=p!==null&&cp!==null&&cp!==undefined?(cp>=0?'▲':'▼'):'';const cg=p!==null&&cp!==null&&cp!==undefined?arr+' '+Math.abs(cp).toFixed(2)+'%':'--';const pr=p!==null?'$'+p.toFixed(2):(FB[t]?'$'+FB[t].p.toFixed(2):'---');const fl=d.f||(FB[t]?FB[t].f:null);return '<div class="ticker-card c'+(i%9)+'"><button class="tc-del" onclick="rmTicker(\''+t+'\')">✕</button><div class="tc-top"><span class="tc-symbol" style="color:'+ci(i)+'">'+(d.n||t)+'</span><span class="tc-name">'+t+'</span></div><div class="tc-price">'+pr+'</div><div class="tc-chg '+cls+'">'+cg+'</div><div class="tc-flow">资金：'+(fl?'<span class="'+(fl.d==='流入'?'in':'out')+'">'+fl.l+'</span>':'<span style="color:var(--text3)">暂无</span>')+'</div></div>'}).join('');
   // flow
-  const el=document.getElementById('flowBox');
+  const fe=document.getElementById('flowBox');
   let ic=0,oc=0;
-  tickers.forEach(t=>{const d=stockData[t];if(d&&d.flow){if(d.flow.direction==='流入')ic++;else oc++}});
-  const pct=ic+oc>0?Math.round(ic/(ic+oc)*100):50;
-  el.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span><strong style="color:var(--green)">📈 流入</strong> '+ic+'只</span><span><strong style="color:var(--red)">📉 流出</strong> '+oc+'只</span><span><strong style="color:'+(ic>=oc?'var(--green)':'var(--red)')+'">'+(ic>=oc?'净流入':'净流出')+'</strong></span></div><div style="height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,var(--green),var(--red));border-radius:3px"></div></div><div style="display:flex;justify-content:space-between;font-size:0.6rem;color:var(--text3)"><span>流入 '+ic+'只</span><span>流出 '+oc+'只</span></div><div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:0.68rem">'+(ic>=oc?'✅ 市场情绪偏积极，主力资金流入为主':'⚠️ 主力资金流出为主，注意控制仓位')+'</div>';
-
+  TKS.forEach(t=>{const d=SD[t]||{};const f=d.f||(FB[t]?FB[t].f:null);if(f){if(f.d==='流入')ic++;else oc++}});
+  const fp=ic+oc>0?Math.round(ic/(ic+oc)*100):50;
+  fe.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span><strong style="color:var(--green)">📈 流入</strong> '+ic+'只</span><span><strong style="color:var(--red)">📉 流出</strong> '+oc+'只</span><span><strong style="color:'+(ic>=oc?'var(--green)':'var(--red)')+'">'+(ic>=oc?'净流入':'净流出')+'</strong></span></div><div style="height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:'+fp+'%;background:linear-gradient(90deg,var(--green),var(--red));border-radius:3px"></div></div><div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:0.68rem">'+(ic>=oc?'✅ 市场情绪偏积极，主力资金流入为主':'⚠️ 主力资金流出为主，注意控制仓位')+'</div>';
   // tabs
   const te=document.getElementById('st');
-  te.innerHTML=tickers.map((t,i)=>'<button class="stock-tab'+(i===0?' active':'')+'" data-s="'+t+'" style="border-bottom:2px solid '+ci(i)+'">'+(stockData[t]?.name||t)+'</button>').join('');
+  te.innerHTML=TKS.map((t,i)=>'<button class="stock-tab'+(i===0?' active':'')+'" data-s="'+t+'" style="border-bottom:2px solid '+ci(i)+'">'+(SD[t]?.n||t)+'</button>').join('');
   te.querySelectorAll('.stock-tab').forEach(t=>t.addEventListener('click',()=>{te.querySelectorAll('.stock-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.querySelectorAll('.news-box').forEach(b=>b.classList.remove('active'));const nb=document.getElementById('n-'+t.dataset.s);if(nb)nb.classList.add('active')}));
+  // news
   const ne=document.getElementById('nb');
-  const tlb={'hot':'🔥 热点','er':'📊 财报','pr':'🏭 进展','an':'📈 机构','ai':'🤖 AI'};
-  const tgt=['hot','er','pr','an','ai'];
-  ne.innerHTML=tickers.map((t,i)=>{const d=stockData[t]||{};const items=d.news||[];const ni=items.length>0?items.map((it,idx)=>'<div class="news-item"><span class="ni-tag '+tgt[idx%5]+'">'+(tlb[tgt[idx%5]]||'')+'</span><h4>'+(it.title||'资讯')+'</h4><p>'+(it.desc||'')+'</p><div class="ni-src">'+(it.source||'Yahoo')+'</div></div>').join(''):'<div style="padding:12px;text-align:center;font-size:0.72rem;color:var(--text3)">暂无资讯</div>';return '<div class="news-box'+(i===0?' active':'')+'" id="n-'+t+'">'+ni+'</div>'}).join('');
-
+  ne.innerHTML=TKS.map((t,i)=>{const d=SD[t]||{};const ws=d.w||(FB[t]?FB[t].w:[])||[];const ni=ws.length>0?ws.map((it,idx)=>'<div class="news-item"><span class="ni-tag '+TAGS[idx%5]+'">'+(TAG_LB[TAGS[idx%5]]||'')+'</span><h4>'+(it.t||it.title||'资讯')+'</h4><p>'+(it.d||it.desc||'')+'</p><div class="ni-src">'+(it.src||it.source||'Yahoo')+'</div></div>').join(''):'<div style="padding:12px;text-align:center;font-size:0.72rem;color:var(--text3)">暂无资讯</div>';return '<div class="news-box'+(i===0?' active':'')+'" id="n-'+t+'">'+ni+'</div>'}).join('');
   // advice
   const ae=document.getElementById('al');
-  ae.innerHTML=tickers.map((t,i)=>{const d=stockData[t]||{};const a=d.advice||{};const rm={'强烈买入':'buy','买入':'buy','持有观望':'hold','持有':'hold'};const rc=rm[a.rate]||'hold';const pl=(a.pros||[]).map(x=>'<li class="g">'+x+'</li>').join('');const cl=(a.cons||[]).map(x=>'<li class="r">'+x+'</li>').join('');const pr=d.price!==null&&d.price!==undefined?'$'+d.price.toFixed(2):'---';return '<div class="advice-item" style="border-left-color:'+ci(i)+'"><div class="ai-header"><h3 style="color:'+ci(i)+'">'+(d.name||t)+' · '+t+'</h3><span class="ai-rate '+rc+'">'+(a.rate||'持有')+'</span></div><div class="ai-body"><strong>核心逻辑：</strong>'+(a.core||'')+'<ul>'+pl+cl+'<li class="y">💡 '+(a.strategy||'暂观望')+'</li></ul></div><div class="ai-target"><span>目标价 '+(a.target||'待定')+' · 当前 '+pr+'</span><span>风险等级：'+(a.risk||'中')+'</span></div></div>'}).join('');
-
+  ae.innerHTML=TKS.map((t,i)=>{const d=SD[t]||{};const a=d.a||{};const rc=TAGI[a.r]||'hold';const g=(a.g||[]).map(x=>'<li class="g">'+x+'</li>').join('');const b=(a.b||[]).map(x=>'<li class="r">'+x+'</li>').join('');const pr=d.p!==null?'$'+d.p.toFixed(2):(FB[t]?'$'+FB[t].p.toFixed(2):'---');return '<div class="advice-item" style="border-left-color:'+ci(i)+'"><div class="ai-header"><h3 style="color:'+ci(i)+'">'+(d.n||t)+' · '+t+'</h3><span class="ai-rate '+rc+'">'+(a.r||'持有')+'</span></div><div class="ai-body"><strong>核心逻辑：</strong>'+(a.c||'')+'<ul>'+g+b+'<li class="y">💡 '+(a.y||'暂观望')+'</li></ul></div><div class="ai-target"><span>目标价 '+(a.t||'待定')+' · 当前 '+pr+'</span><span>风险等级：'+(a.k||'中')+'</span></div></div>'}).join('');
   // portfolio
   const pe=document.getElementById('pc');
-  const aa=tickers.length>0?(100/tickers.length):0;
-  const ab=tickers.map((t,i)=>'<div class="alloc-item"><span style="font-size:0.72rem;font-weight:600;min-width:60px;color:'+ci(i)+'">'+(stockData[t]?.name||t)+'</span><div class="alloc-bar-wrap"><div class="alloc-bar" style="width:'+aa+'%;background:'+ci(i)+'"></div></div><span class="alloc-pct" style="color:'+ci(i)+'">'+aa.toFixed(0)+'%</span></div>').join('');
-  const tr=tickers.map((t,i)=>{const d=stockData[t]||{};const cp=d.change_pct;const cc=cp!==null&&cp!==undefined?(cp>=0?'vg':'vr'):'';const cs=cp!==null&&cp!==undefined?(cp>=0?'+':'')+cp.toFixed(2)+'%':'--';const ps=d.price!==null&&d.price!==undefined?'$'+d.price.toFixed(2):'---';return '<tr><td style="color:'+ci(i)+'">'+(d.name||t)+'</td><td>'+t+'</td><td>'+ps+'</td><td class="'+cc+'">'+cs+'</td></tr>'}).join('');
-  const uc=tickers.filter(t=>{const d=stockData[t];return d&&d.change_pct!==null&&d.change_pct!==undefined&&d.change_pct>=0}).length;
-  const dc=tickers.length-uc;
-  pe.innerHTML='<div class="pf-card pf-score"><div class="pf-num">'+(tickers.length>0?'6.8':'--')+' / 10</div><div class="pf-label">组合健康评分</div><div class="pf-desc"><strong>今日：</strong>'+uc+'涨 '+dc+'跌 · 仓位 40% · 浮亏 10%</div></div><div class="pf-card"><h3>📊 配置比例</h3>'+ab+'</div><div class="pf-card"><h3>📋 持仓速览</h3><div style="overflow-x:auto"><table class="pf-table"><thead><tr><th>股票</th><th>代码</th><th>现价</th><th>涨跌</th></tr></thead><tbody>'+(tr||'<tr><td colspan="4" style="text-align:center;color:var(--text3)">暂无</td></tr>')+'</tbody></table></div></div><div class="strategy-box"><h3>📌 调仓建议</h3><ul><li>当前浮亏10%，正常波动范围，无需恐慌减仓</li><li>利用 <span class="highlight">60% 可用资金</span> 分3-4周分批加仓</li><li>优先加仓 AI/科技（GOOGL）+ 云计算（BABA）</li><li>LI待回调后加仓，BG防御仓不动</li><li>目标：科技45% | 新能源车20% | 农业10% | 现金25%</li></ul></div><div class="pf-card"><h3>📌 '+new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'})+'</h3><div class="ai-body">今日 '+uc+'涨 '+dc+'跌。策略：耐心分批加仓。</div></div>';
-
+  const aa=TKS.length>0?(100/TKS.length):0;
+  const ab=TKS.map((t,i)=>'<div class="alloc-item"><span style="font-size:0.72rem;font-weight:600;min-width:60px;color:'+ci(i)+'">'+(SD[t]?.n||t)+'</span><div class="alloc-bar-wrap"><div class="alloc-bar" style="width:'+aa+'%;background:'+ci(i)+'"></div></div><span class="alloc-pct" style="color:'+ci(i)+'">'+aa.toFixed(0)+'%</span></div>').join('');
+  const tr=TKS.map((t,i)=>{const d=SD[t]||{};const p=d.p!==null?d.p:(FB[t]?FB[t].p:null);const cp=d.c!==null&&d.c!==undefined?d.c:(FB[t]?FB[t].c:null);const cc=cp!==null&&cp!==undefined?(cp>=0?'vg':'vr'):'';const cs=cp!==null&&cp!==undefined?(cp>=0?'+':'')+cp.toFixed(2)+'%':'--';const ps=p!==null?'$'+p.toFixed(2):'---';return '<tr><td style="color:'+ci(i)+'">'+(d.n||t)+'</td><td>'+t+'</td><td>'+ps+'</td><td class="'+cc+'">'+cs+'</td></tr>'}).join('');
+  const uc=TKS.filter(t=>{const d=SD[t];const cp=d.c!==null&&d.c!==undefined?d.c:(FB[t]?FB[t].c:null);return cp!==null&&cp!==undefined&&cp>=0}).length;
+  const dc=TKS.length-uc;
+  pe.innerHTML='<div class="pf-card pf-score"><div class="pf-num">'+(TKS.length>0?'6.8':'--')+' / 10</div><div class="pf-label">组合健康评分</div><div class="pf-desc"><strong>今日：</strong>'+uc+'涨 '+dc+'跌 · 仓位40% · 浮亏10%</div></div><div class="pf-card"><h3>📊 配置比例</h3>'+ab+'</div><div class="pf-card"><h3>📋 持仓速览</h3><div style="overflow-x:auto"><table class="pf-table"><thead><tr><th>股票</th><th>代码</th><th>现价</th><th>涨跌</th></tr></thead><tbody>'+(tr||'<tr><td colspan="4" style="text-align:center;color:var(--text3)">暂无</td></tr>')+'</tbody></table></div></div><div class="strategy-box"><h3>📌 调仓建议</h3><ul><li>浮亏10%正常范围，无需恐慌</li><li><span class="highlight">60% 可用资金</span> 分3-4周分批加仓</li><li>优先 AI/科技 + 云计算</li><li>目标：科技45% | 新能源20% | 农业10% | 现金25%</li></ul></div><div class="pf-card"><h3>📌 '+new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'})+'</h3><div class="ai-body">今日 '+uc+'涨 '+dc+'跌。耐心分批加仓。</div></div>';
   // nav
   document.querySelectorAll('.bn-item').forEach(i=>{i.removeEventListener('click',nh);i.addEventListener('click',nh)});
   function nh(){document.querySelectorAll('.bn-item').forEach(x=>x.classList.remove('active'));this.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+this.dataset.p).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 }
-
 document.getElementById('headerDate').innerHTML='<strong>'+new Date().toLocaleDateString('zh-CN',{month:'long',day:'numeric'})+'</strong> · '+new Date().toLocaleDateString('zh-CN',{weekday:'short'});
 loadData();
 </script>
