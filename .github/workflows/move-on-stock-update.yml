@@ -2,7 +2,8 @@ name: Move on Stock 每小时自动更新
 
 on:
   schedule:
-    - cron: '0 * * * 1-5'
+    # 美股交易时间 9:30-16:00 ET = UTC 13:30-20:00
+    - cron: '30 13-20 * * 1-5'
   workflow_dispatch:
 
 permissions:
