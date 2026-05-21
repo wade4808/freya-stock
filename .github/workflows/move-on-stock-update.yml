@@ -1,0 +1,42 @@
+name: Move on Stock 每小时自动更新
+
+on:
+  schedule:
+    - cron: '0 * * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-stock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 检查文件是否存在
+        run: |
+          ls -la move_on_stock_update.py || echo "❌ 找不到 move_on_stock_update.py！请先上传"
+
+      - name: 安装依赖
+        run: pip install yfinance
+
+      - name: 运行更新脚本
+        run: python move_on_stock_update.py
+
+      - name: 提交并推送更新
+        run: |
+          git config user.name "Move on Stock Bot"
+          git config user.email "bot@moveonstock.com"
+          git add move_on_stock_data.json
+          if git diff --cached --quiet; then
+            echo "没有新变化，跳过提交"
+          else
+            git commit -m "📊 美股自动更新 $(date '+%Y-%m-%d %H:%M')"
+            git push
+            echo "✅ 已推送更新"
+          fi
