@@ -1,0 +1,42 @@
+name: Freya's Stock 每日自动更新
+
+on:
+  schedule:
+    - cron: '30 7 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-stock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 检查文件是否存在
+        run: |
+          ls -la daily_update.py || echo "❌ 找不到 daily_update.py！请先上传此文件到仓库根目录"
+
+      - name: 安装依赖
+        run: pip install requests
+
+      - name: 运行更新脚本
+        run: python daily_update.py
+
+      - name: 提交并推送更新
+        run: |
+          git config user.name "Freya Stock Bot"
+          git config user.email "bot@freyastock.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "没有新变化，跳过提交"
+          else
+            git commit -m "📊 每日自动更新 $(date '+%Y-%m-%d')"
+            git push
+            echo "✅ 已推送更新"
+          fi
