@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-22 20:19",
+  "update_time": "2026-05-22 21:42",
   "tickers": [
     "GOOGL",
     "LI",
@@ -43,7 +43,7 @@
     "LI": {
       "price": 15.89,
       "change_pct": -1.91,
-      "volume": 6365102,
+      "volume": 6377076,
       "name": "理想汽车",
       "sector": "新能源车",
       "flow": {
@@ -109,12 +109,12 @@
     "BABA": {
       "price": 130.0,
       "change_pct": -1.12,
-      "volume": 11697661,
+      "volume": 11745743,
       "name": "阿里巴巴",
       "sector": "电商/云",
       "flow": {
         "direction": "流出",
-        "label": "$228.1M 流出"
+        "label": "$229.0M 流出"
       },
       "news": [
         {
