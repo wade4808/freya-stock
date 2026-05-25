@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-22 21:42",
+  "update_time": "2026-05-25 16:07",
   "tickers": [
     "GOOGL",
     "LI",
@@ -10,12 +10,12 @@
     "GOOGL": {
       "price": 382.97,
       "change_pct": -1.21,
-      "volume": 19134802,
+      "volume": 20442123,
       "name": "谷歌",
       "sector": "科技",
       "flow": {
         "direction": "流出",
-        "label": "$1099.2M 流出"
+        "label": "$1174.3M 流出"
       },
       "news": [
         {
@@ -43,12 +43,12 @@
     "LI": {
       "price": 15.89,
       "change_pct": -1.91,
-      "volume": 6377076,
+      "volume": 6422104,
       "name": "理想汽车",
       "sector": "新能源车",
       "flow": {
         "direction": "流出",
-        "label": "$15.2M 流出"
+        "label": "$15.3M 流出"
       },
       "news": [
         {
