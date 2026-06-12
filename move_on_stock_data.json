@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-06-12 16:30",
+  "update_time": "2026-06-12 18:25",
   "tickers": [
     "GOOGL",
     "LI",
@@ -8,14 +8,14 @@
   ],
   "stocks": {
     "GOOGL": {
-      "price": 361.485,
-      "change_pct": 1.04,
-      "volume": 13450415,
+      "price": 361.045,
+      "change_pct": 0.92,
+      "volume": 16328166,
       "name": "谷歌",
       "sector": "科技",
       "flow": {
         "direction": "流入",
-        "label": "$729.3M 流入"
+        "label": "$884.3M 流入"
       },
       "news": [
         {
@@ -41,44 +41,11 @@
       ]
     },
     "LI": {
-      "price": 14.285,
-      "change_pct": 3.66,
-      "volume": 2439448,
+      "price": 14.33,
+      "change_pct": 3.99,
+      "volume": 3081838,
       "name": "理想汽车",
       "sector": "新能源车",
-      "flow": {
-        "direction": "流入",
-        "label": "$5.2M 流入"
-      },
-      "news": [
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        }
-      ]
-    },
-    "BG": {
-      "price": 126.68,
-      "change_pct": 1.12,
-      "volume": 348500,
-      "name": "邦基",
-      "sector": "农业",
       "flow": {
         "direction": "流入",
         "label": "$6.6M 流入"
@@ -106,15 +73,48 @@
         }
       ]
     },
+    "BG": {
+      "price": 126.355,
+      "change_pct": 0.86,
+      "volume": 520576,
+      "name": "邦基",
+      "sector": "农业",
+      "flow": {
+        "direction": "流入",
+        "label": "$9.9M 流入"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        }
+      ]
+    },
     "BABA": {
-      "price": 111.58,
-      "change_pct": -0.99,
-      "volume": 4408970,
+      "price": 112.095,
+      "change_pct": -0.53,
+      "volume": 5819421,
       "name": "阿里巴巴",
       "sector": "电商/云",
       "flow": {
         "direction": "流出",
-        "label": "$73.8M 流出"
+        "label": "$97.8M 流出"
       },
       "news": [
         {
