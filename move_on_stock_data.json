@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-06-24 20:17",
+  "update_time": "2026-06-24 21:53",
   "tickers": [
     "GOOGL",
     "LI",
@@ -43,7 +43,7 @@
     "LI": {
       "price": 12.39,
       "change_pct": -1.9,
-      "volume": 2341973,
+      "volume": 2346826,
       "name": "理想汽车",
       "sector": "新能源车",
       "flow": {
@@ -76,12 +76,12 @@
     "BG": {
       "price": 108.99,
       "change_pct": -1.69,
-      "volume": 2252042,
+      "volume": 2638904,
       "name": "邦基",
       "sector": "农业",
       "flow": {
         "direction": "流出",
-        "label": "$36.8M 流出"
+        "label": "$43.1M 流出"
       },
       "news": [
         {
@@ -107,8 +107,8 @@
       ]
     },
     "BABA": {
-      "price": 99.79,
-      "change_pct": -2.74,
+      "price": 99.8,
+      "change_pct": -2.73,
       "volume": 14968988,
       "name": "阿里巴巴",
       "sector": "电商/云",
