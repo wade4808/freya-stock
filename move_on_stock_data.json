@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-07-08 20:03",
+  "update_time": "2026-07-08 21:40",
   "tickers": [
     "GOOGL",
     "LI",
@@ -8,47 +8,23 @@
   ],
   "stocks": {
     "GOOGL": {
-      "price": 361.92,
-      "change_pct": -1.39,
-      "volume": 18973681,
+      "price": null,
+      "change_pct": null,
+      "volume": null,
       "name": "谷歌",
-      "sector": "科技",
-      "flow": {
-        "direction": "流出",
-        "label": "$1030.0M 流出"
-      },
-      "news": [
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        }
-      ]
+      "sector": "其他",
+      "flow": null,
+      "news": []
     },
     "LI": {
       "price": 12.12,
       "change_pct": 0.58,
-      "volume": 3095542,
+      "volume": 3109064,
       "name": "理想汽车",
       "sector": "新能源车",
       "flow": {
         "direction": "流入",
-        "label": "$5.6M 流入"
+        "label": "$5.7M 流入"
       },
       "news": [
         {
@@ -74,14 +50,14 @@
       ]
     },
     "BG": {
-      "price": 115.22,
-      "change_pct": 3.89,
-      "volume": 1310015,
+      "price": 115.23,
+      "change_pct": 3.9,
+      "volume": 1667346,
       "name": "邦基",
       "sector": "农业",
       "flow": {
         "direction": "流入",
-        "label": "$22.6M 流入"
+        "label": "$28.8M 流入"
       },
       "news": [
         {
@@ -107,14 +83,14 @@
       ]
     },
     "BABA": {
-      "price": 108.968,
-      "change_pct": 11.03,
-      "volume": 36629654,
+      "price": 108.98,
+      "change_pct": 11.05,
+      "volume": 38329486,
       "name": "阿里巴巴",
       "sector": "电商/云",
       "flow": {
         "direction": "流入",
-        "label": "$598.7M 流入"
+        "label": "$626.6M 流入"
       },
       "news": [
         {
