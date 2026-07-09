@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-07-09 18:16",
+  "update_time": "2026-07-09 20:17",
   "tickers": [
     "GOOGL",
     "LI",
@@ -8,14 +8,14 @@
   ],
   "stocks": {
     "GOOGL": {
-      "price": 356.83,
-      "change_pct": -1.41,
-      "volume": 15277362,
+      "price": 358.89,
+      "change_pct": -0.84,
+      "volume": 24092965,
       "name": "谷歌",
       "sector": "科技",
       "flow": {
         "direction": "流出",
-        "label": "$817.7M 流出"
+        "label": "$1297.0M 流出"
       },
       "news": [
         {
@@ -41,14 +41,14 @@
       ]
     },
     "LI": {
-      "price": 11.875,
-      "change_pct": -2.02,
-      "volume": 3137732,
+      "price": 11.91,
+      "change_pct": -1.73,
+      "volume": 4239310,
       "name": "理想汽车",
       "sector": "新能源车",
       "flow": {
         "direction": "流出",
-        "label": "$5.6M 流出"
+        "label": "$7.6M 流出"
       },
       "news": [
         {
@@ -74,14 +74,14 @@
       ]
     },
     "BG": {
-      "price": 114.515,
-      "change_pct": -0.62,
-      "volume": 682111,
+      "price": 113.62,
+      "change_pct": -1.4,
+      "volume": 1127569,
       "name": "邦基",
       "sector": "农业",
       "flow": {
         "direction": "流出",
-        "label": "$11.7M 流出"
+        "label": "$19.2M 流出"
       },
       "news": [
         {
@@ -107,31 +107,16 @@
       ]
     },
     "BABA": {
-      "price": 112.07,
-      "change_pct": 2.84,
-      "volume": 9884784,
+      "price": 111.16,
+      "change_pct": 2.0,
+      "volume": 12814244,
       "name": "阿里巴巴",
       "sector": "电商/云",
       "flow": {
         "direction": "流入",
-        "label": "$166.2M 流入"
+        "label": "$213.7M 流入"
       },
       "news": [
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
         {
           "title": "",
           "desc": "",
