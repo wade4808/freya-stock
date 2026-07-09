@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-07-08 21:40",
+  "update_time": "2026-07-09 16:11",
   "tickers": [
     "GOOGL",
     "LI",
@@ -8,23 +8,47 @@
   ],
   "stocks": {
     "GOOGL": {
-      "price": null,
-      "change_pct": null,
-      "volume": null,
+      "price": 354.1,
+      "change_pct": -2.16,
+      "volume": 11600362,
       "name": "谷歌",
-      "sector": "其他",
-      "flow": null,
-      "news": []
+      "sector": "科技",
+      "flow": {
+        "direction": "流出",
+        "label": "$616.2M 流出"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        }
+      ]
     },
     "LI": {
-      "price": 12.12,
-      "change_pct": 0.58,
-      "volume": 3109064,
+      "price": 11.86,
+      "change_pct": -2.15,
+      "volume": 2505400,
       "name": "理想汽车",
       "sector": "新能源车",
       "flow": {
-        "direction": "流入",
-        "label": "$5.7M 流入"
+        "direction": "流出",
+        "label": "$4.5M 流出"
       },
       "news": [
         {
@@ -50,14 +74,14 @@
       ]
     },
     "BG": {
-      "price": 115.23,
-      "change_pct": 3.9,
-      "volume": 1667346,
+      "price": 115.11,
+      "change_pct": -0.1,
+      "volume": 473381,
       "name": "邦基",
       "sector": "农业",
       "flow": {
-        "direction": "流入",
-        "label": "$28.8M 流入"
+        "direction": "流出",
+        "label": "$8.2M 流出"
       },
       "news": [
         {
@@ -83,14 +107,14 @@
       ]
     },
     "BABA": {
-      "price": 108.98,
-      "change_pct": 11.05,
-      "volume": 38329486,
+      "price": 111.5579,
+      "change_pct": 2.37,
+      "volume": 8104724,
       "name": "阿里巴巴",
       "sector": "电商/云",
       "flow": {
         "direction": "流入",
-        "label": "$626.6M 流入"
+        "label": "$135.6M 流入"
       },
       "news": [
         {
