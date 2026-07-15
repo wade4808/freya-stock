@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-07-15 18:37",
+  "update_time": "2026-07-15 20:32",
   "tickers": [
     "GOOGL",
     "LI",
@@ -8,14 +8,14 @@
   ],
   "stocks": {
     "GOOGL": {
-      "price": 372.365,
-      "change_pct": 3.58,
-      "volume": 17785087,
+      "price": 370.92,
+      "change_pct": 3.17,
+      "volume": 28115784,
       "name": "谷歌",
       "sector": "科技",
       "flow": {
         "direction": "流入",
-        "label": "$993.4M 流入"
+        "label": "$1564.3M 流入"
       },
       "news": [
         {
@@ -41,14 +41,14 @@
       ]
     },
     "LI": {
-      "price": 12.79,
-      "change_pct": 2.57,
-      "volume": 1924988,
+      "price": 12.73,
+      "change_pct": 2.09,
+      "volume": 2838933,
       "name": "理想汽车",
       "sector": "新能源车",
       "flow": {
         "direction": "流入",
-        "label": "$3.7M 流入"
+        "label": "$5.4M 流入"
       },
       "news": [
         {
@@ -74,47 +74,26 @@
       ]
     },
     "BG": {
-      "price": 115.85,
-      "change_pct": -0.67,
-      "volume": 341519,
+      "price": 115.72,
+      "change_pct": -0.78,
+      "volume": 607009,
       "name": "邦基",
       "sector": "农业",
       "flow": {
         "direction": "流出",
-        "label": "$5.9M 流出"
+        "label": "$10.5M 流出"
       },
-      "news": [
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        },
-        {
-          "title": "",
-          "desc": "",
-          "source": "Yahoo Finance"
-        }
-      ]
+      "news": []
     },
     "BABA": {
-      "price": 118.325,
-      "change_pct": 5.35,
-      "volume": 16447664,
+      "price": 117.69,
+      "change_pct": 4.78,
+      "volume": 19379565,
       "name": "阿里巴巴",
       "sector": "电商/云",
       "flow": {
         "direction": "流入",
-        "label": "$291.9M 流入"
+        "label": "$342.1M 流入"
       },
       "news": [
         {
