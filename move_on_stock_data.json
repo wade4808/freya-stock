@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-07-30 18:54",
+  "update_time": "2026-07-30 20:42",
   "tickers": [
     "GOOGL",
     "LI",
@@ -8,14 +8,14 @@
   ],
   "stocks": {
     "GOOGL": {
-      "price": 334.8225,
-      "change_pct": -0.56,
-      "volume": 19837277,
+      "price": 333.66,
+      "change_pct": -0.91,
+      "volume": 29500625,
       "name": "谷歌",
       "sector": "科技",
       "flow": {
         "direction": "流出",
-        "label": "$996.3M 流出"
+        "label": "$1476.5M 流出"
       },
       "news": [
         {
@@ -41,14 +41,14 @@
       ]
     },
     "LI": {
-      "price": 13.325,
-      "change_pct": -3.44,
-      "volume": 3493721,
+      "price": 13.49,
+      "change_pct": -2.25,
+      "volume": 5204542,
       "name": "理想汽车",
       "sector": "新能源车",
       "flow": {
         "direction": "流出",
-        "label": "$7.0M 流出"
+        "label": "$10.5M 流出"
       },
       "news": [
         {
@@ -74,14 +74,14 @@
       ]
     },
     "BG": {
-      "price": 105.98,
-      "change_pct": -1.67,
-      "volume": 1191551,
+      "price": 105.07,
+      "change_pct": -2.51,
+      "volume": 2093627,
       "name": "邦基",
       "sector": "农业",
       "flow": {
         "direction": "流出",
-        "label": "$18.9M 流出"
+        "label": "$33.0M 流出"
       },
       "news": [
         {
@@ -107,14 +107,14 @@
       ]
     },
     "BABA": {
-      "price": 115.95,
-      "change_pct": 0.8,
-      "volume": 5464228,
+      "price": 116.32,
+      "change_pct": 1.12,
+      "volume": 7173617,
       "name": "阿里巴巴",
       "sector": "电商/云",
       "flow": {
         "direction": "流入",
-        "label": "$95.0M 流入"
+        "label": "$125.2M 流入"
       },
       "news": [
         {
