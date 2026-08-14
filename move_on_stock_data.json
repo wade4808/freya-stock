@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-08-13 21:13",
+  "update_time": "2026-08-14 14:29",
   "tickers": [
     "GOOGL",
     "LI",
@@ -8,40 +8,136 @@
   ],
   "stocks": {
     "GOOGL": {
-      "price": null,
-      "change_pct": null,
-      "volume": null,
+      "price": 346.385,
+      "change_pct": 0.01,
+      "volume": 3620360,
       "name": "谷歌",
-      "sector": "其他",
-      "flow": null,
-      "news": []
+      "sector": "科技",
+      "flow": {
+        "direction": "流入",
+        "label": "$188.1M 流入"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        }
+      ]
     },
     "LI": {
-      "price": null,
-      "change_pct": null,
-      "volume": null,
+      "price": 12.325,
+      "change_pct": 0.45,
+      "volume": 440676,
       "name": "理想汽车",
-      "sector": "其他",
-      "flow": null,
-      "news": []
+      "sector": "新能源车",
+      "flow": {
+        "direction": "流入",
+        "label": "$0.8M 流入"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        }
+      ]
     },
     "BG": {
-      "price": null,
-      "change_pct": null,
-      "volume": null,
+      "price": 114.02,
+      "change_pct": 1.14,
+      "volume": 43664,
       "name": "邦基",
-      "sector": "其他",
-      "flow": null,
-      "news": []
+      "sector": "农业",
+      "flow": {
+        "direction": "流入",
+        "label": "$0.7M 流入"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        }
+      ]
     },
     "BABA": {
-      "price": null,
-      "change_pct": null,
-      "volume": null,
+      "price": 124.7,
+      "change_pct": 2.08,
+      "volume": 2766633,
       "name": "阿里巴巴",
-      "sector": "其他",
-      "flow": null,
-      "news": []
+      "sector": "电商/云",
+      "flow": {
+        "direction": "流入",
+        "label": "$51.7M 流入"
+      },
+      "news": [
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        },
+        {
+          "title": "",
+          "desc": "",
+          "source": "Yahoo Finance"
+        }
+      ]
     }
   },
   "portfolio": {
